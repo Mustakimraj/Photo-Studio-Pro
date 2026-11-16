@@ -1,1 +1,284 @@
-
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Photo Studio Pro</title>
+<style>
+:root{--bg:#0b1220;--panel:#142238;--line:#30425b;--txt:#edf4ff;--muted:#a9b8cc;--green:#35c6a3;--blue:#218bff}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#09111e,#14243a);color:var(--txt);font:16px system-ui,"Segoe UI",sans-serif}
+header{padding:16px 4%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#0b1422;border-bottom:1px solid var(--line)}
+.brand{font-size:22px;font-weight:800}
+.brand span{color:var(--green)}
+main{max-width:1200px;margin:24px auto;padding:0 15px}
+.intro p,.hint,footer{color:var(--muted)}
+.tabs,.actions,.top{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.card{background:#142238;border:1px solid var(--line);border-radius:15px;padding:17px}
+.layout{display:grid;grid-template-columns:1.4fr .9fr;gap:16px}
+.preview{min-height:330px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px dashed #536985;border-radius:12px;background:repeating-conic-gradient(#20324a 0 25%,#17273c 0 50%) 50%/22px 22px}
+.preview canvas{max-width:100%;max-height:550px}
+.empty{text-align:center;color:var(--muted)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.full{grid-column:1/-1}
+label{font-size:13px;color:var(--muted)}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:#0b1524;color:var(--txt)}
+input[type=color]{height:42px;padding:3px}
+input[type=range]{padding:0;accent-color:var(--green)}
+button,.filebtn{border:0;border-radius:9px;padding:10px 14px;background:var(--green);color:#06221c;font-weight:700;cursor:pointer}
+.secondary{background:#263a54;color:var(--txt);border:1px solid var(--line)}
+.blue{background:var(--blue);color:white}
+.tab{background:#263a54;color:var(--txt)}
+.tab.active{background:var(--green);color:#06221c}
+.section{display:none}
+.section.active{display:block}
+.hidden{display:none!important}
+.status{color:#8ce6ce;font-size:13px;min-height:20px;margin-top:10px}
+.features{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.feature{background:#0d1929;border:1px solid var(--line);border-radius:9px;padding:12px;font-size:14px}
+.feature b{display:block}
+footer{text-align:center;padding:25px;font-size:12px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}}
+@media(max-width:480px){.controls,.features{grid-template-columns:1fr}.card{padding:13px}}
+@media print{body{background:white;color:black}header,.intro,.tabs,.editor-controls,.no-print,footer{display:none!important}main{margin:0;padding:0}.layout{display:block}.card{border:0;background:white}.preview{border:0;background:white;min-height:0}.preview canvas{max-height:270mm}}
+</style>
+</head>
+<body>
+<header>
+<div class="brand">📷 Photo <span>Studio Pro</span></div>
+<div class="top">
+<button class="secondary" id="login">Customer Login</button>
+<button class="secondary" id="admin">Admin Demo</button>
+</div>
+</header>
+<main>
+<div class="intro">
+<h1>Photo Editing and Printing App</h1>
+<p>ছবি আপলোড, এডিট, পাসপোর্ট/স্ট্যাম্প সাইজ ও প্রিন্ট করুন।</p>
+</div>
+<nav class="tabs no-print">
+<button class="tab active" data-tab="editor">Photo Editor</button>
+<button class="tab" data-tab="print">Print Layout</button>
+<button class="tab" data-tab="features">Features</button>
+</nav>
+<section id="editor" class="section active">
+<div class="layout">
+<div class="card">
+<h2>ছবির প্রিভিউ</h2>
+<div class="preview">
+<div id="empty" class="empty"><b>এখানে ছবি দেখা যাবে</b><br>প্রথমে ছবি আপলোড করুন</div>
+<canvas id="canvas" class="hidden"></canvas>
+</div>
+<div class="actions editor-controls">
+<label class="filebtn" for="upload">ছবি আপলোড</label>
+<input id="upload" type="file" accept="image/*" class="hidden">
+<button id="reset" class="secondary">রিসেট</button>
+<button id="jpg" class="blue">JPG ডাউনলোড</button>
+<button id="png" class="secondary">PNG ডাউনলোড</button>
+</div>
+<div id="status" class="status"></div>
+</div>
+<div class="card editor-controls">
+<h2>এডিটিং টুলস</h2>
+<div class="controls">
+<div class="field full">
+<label>Background Color</label>
+<input id="bg" type="color" value="#ffffff">
+</div>
+<div class="field">
+<label>Brightness</label>
+<input id="bright" type="range" min="50" max="160" value="100">
+</div>
+<div class="field">
+<label>Contrast</label>
+<input id="contrast" type="range" min="50" max="160" value="100">
+</div>
+<div class="field">
+<label>Saturation</label>
+<input id="sat" type="range" min="0" max="200" value="100">
+</div>
+<div class="field">
+<label>Face Beauty / Softness</label>
+<input id="soft" type="range" min="0" max="5" value="0">
+</div>
+<div class="field full">
+<label>ছবির সাইজ</label>
+<select id="preset">
+<option value="original">Original</option>
+<option value="passport">Passport (35×45 mm)</option>
+<option value="stamp">Stamp (25×30 mm)</option>
+<option value="custom">Custom crop (4:5)</option>
+</select>
+</div>
+<div class="field">
+<label>প্রস্থ (px)</label>
+<input id="w" type="number" min="1" max="6000" placeholder="যেমন 600">
+</div>
+<div class="field">
+<label>উচ্চতা (px)</label>
+<input id="h" type="number" min="1" max="6000" placeholder="যেমন 800">
+</div>
+</div>
+<div class="actions">
+<button id="resize" class="blue">Resize / Crop</button>
+<button id="remove" class="secondary">Automatic Background Removal</button>
+<button id="retouch" class="secondary">Auto Retouch</button>
+</div>
+<p class="hint">Background removal-এর জন্য প্রথমবার ইন্টারনেট থেকে ওপেন-সোর্স মডেল লোড হবে।</p>
+</div>
+</div>
+</section>
+<section id="print" class="section">
+<div class="layout">
+<div class="card">
+<h2>প্রিন্ট প্রিভিউ</h2>
+<div class="preview"><canvas id="sheet"></canvas></div>
+<div class="actions no-print">
+<button id="make" class="blue">A4 Sheet তৈরি</button>
+<button id="print" class="secondary">Print / PDF Save</button>
+</div>
+<p class="hint">Legal paper-এর জন্য প্রিন্ট ডায়ালগে Paper Size পরিবর্তন করুন।</p>
+</div>
+<div class="card editor-controls">
+<h2>প্রিন্ট সেটিংস</h2>
+<div class="controls">
+<div class="field">
+<label>ছবির ধরন</label>
+<select id="kind">
+<option value="passport">Passport</option>
+<option value="stamp">Stamp</option>
+</select>
+</div>
+<div class="field">
+<label>কপি সংখ্যা</label>
+<input id="copies" type="number" min="1" max="60" value="8">
+</div>
+<div class="field full">
+<label>পেপার</label>
+<select id="paper">
+<option>A4</option>
+<option>Legal</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="features" class="section">
+<div class="card">
+<h2>Photo Studio Pro – ফিচারসমূহ</h2>
+<div class="features">
+<div class="feature"><b>Photo Upload</b>ছবি আপলোড</div>
+<div class="feature"><b>Automatic Background Removal</b>স্বয়ংক্রিয় ব্যাকগ্রাউন্ড রিমুভ</div>
+<div class="feature"><b>Background Color Selection</b>ব্যাকগ্রাউন্ড রং নির্বাচন</div>
+<div class="feature"><b>Photo Retouching</b>ছবি রিটাচিং</div>
+<div class="feature"><b>Passport Size Photo</b>পাসপোর্ট সাইজ ছবি</div>
+<div class="feature"><b>Stamp Size Photo</b>স্ট্যাম্প সাইজ ছবি</div>
+<div class="feature"><b>A4 and Legal Paper Printing</b>A4 ও লিগ্যাল পেপার প্রিন্ট</div>
+<div class="feature"><b>Customer Login</b>কাস্টমার লগইন (ডেমো)</div>
+<div class="feature"><b>Photo Crop & Resize</b>ছবি ক্রপ ও রিসাইজ</div>
+<div class="feature"><b>Brightness & Contrast</b>আলো ও কনট্রাস্ট ঠিক করা</div>
+<div class="feature"><b>Face Beauty / Softening</b>সফটেনিং টুল</div>
+<div class="feature"><b>Multiple Photo Layout</b>এক পাতায় একাধিক ছবি</div>
+<div class="feature"><b>Print Preview</b>প্রিন্টের আগে দেখা</div>
+<div class="feature"><b>JPG, PNG Download</b>JPG ও PNG ডাউনলোড</div>
+<div class="feature"><b>Photo Border</b>ছবির বর্ডার</div>
+<div class="feature"><b>Admin Dashboard</b>অ্যাডমিন ডেমো প্যানেল</div>
+</div>
+</div>
+</section>
+</main>
+<footer>Photo Studio Pro • Browser-based starter version</footer>
+<script>
+const $=id=>document.getElementById(id),canvas=$('canvas'),ctx=canvas.getContext('2d'),sheet=$('sheet'),sctx=sheet.getContext('2d');
+let original=null,current=null,transparent=false;
+function msg(t){$('status').textContent=t}
+function draw(){
+if(!current){$('empty').classList.remove('hidden');canvas.classList.add('hidden');return}
+$('empty').classList.add('hidden');canvas.classList.remove('hidden');
+canvas.width=current.width;canvas.height=current.height;
+if(transparent){ctx.fillStyle=$('bg').value;ctx.fillRect(0,0,canvas.width,canvas.height)}
+ctx.save();
+ctx.filter=`brightness(${$('bright').value}%) contrast(${$('contrast').value}%) saturate(${$('sat').value}%) blur(${$('soft').value/2}px)`;
+ctx.drawImage(current,0,0);
+ctx.restore();
+}
+$('upload').onchange=e=>{
+let f=e.target.files[0];if(!f)return;
+if(!f.type.startsWith('image/'))return msg('একটি image ফাইল নির্বাচন করুন।');
+let u=URL.createObjectURL(f),im=new Image();
+im.onload=()=>{original=current=im;transparent=false;draw();msg('ছবি আপলোড হয়েছে।');URL.revokeObjectURL(u)};
+im.onerror=()=>msg('ছবি খোলা যায়নি।');im.src=u;
+};
+['bg','bright','contrast','sat','soft'].forEach(id=>$(id).addEventListener('input',draw));
+$('reset').onclick=()=>{
+if(!original)return;current=original;transparent=false;
+$('bright').value=$('contrast').value=$('sat').value=100;
+$('soft').value=0;draw();msg('মূল ছবি ফিরিয়ে আনা হয়েছে।');
+};
+function save(type){
+if(!current)return msg('আগে ছবি আপলোড করুন।');
+let a=document.createElement('a');
+a.href=canvas.toDataURL(type==='png'?'image/png':'image/jpeg',.94);
+a.download='photo-studio-pro.'+(type==='png'?'png':'jpg');a.click();
+}
+$('jpg').onclick=()=>save('jpg');
+$('png').onclick=()=>save('png');
+$('resize').onclick=()=>{
+if(!current)return msg('আগে ছবি আপলোড করুন।');
+let w=+$('w').value,h=+$('h').value,p=$('preset').value;
+if(p==='passport'){w=413;h=531}
+else if(p==='stamp'){w=295;h=354}
+else if(p==='custom'){w=600;h=750}
+if(!w||!h||w>6000||h>6000)return msg('সঠিক প্রস্থ ও উচ্চতা লিখুন (১–৬০০০)।');
+let c=document.createElement('canvas');c.width=w;c.height=h;
+let x=c.getContext('2d');x.fillStyle=$('bg').value;x.fillRect(0,0,w,h);
+let scale=Math.max(w/current.width,h/current.height),sw=w/scale,sh=h/scale;
+x.drawImage(current,(current.width-sw)/2,(current.height-sh)/2,sw,sh,0,0,w,h);
+let im=new Image();im.onload=()=>{current=im;draw();msg(`ছবি ${w}×${h} px করা হয়েছে।`)};
+im.src=c.toDataURL('image/png');
+};
+$('retouch').onclick=()=>{
+if(!current)return msg('আগে ছবি আপলোড করুন।');
+$('bright').value=108;$('contrast').value=106;$('sat').value=110;$('soft').value=1;
+draw();msg('হালকা Auto Retouch প্রয়োগ হয়েছে।');
+};
+$('remove').onclick=async()=>{
+if(!current)return msg('আগে ছবি আপলোড করুন।');
+let b=$('remove');b.disabled=true;msg('Background removal মডেল লোড হচ্ছে…');
+try{
+let {removeBackground}=await import('https://esm.sh/@imgly/background-removal@1.5.5');
+let blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
+let result=await removeBackground(blob);
+let u=URL.createObjectURL(result),im=new Image();
+im.onload=()=>{current=im;transparent=true;draw();msg('ব্যাকগ্রাউন্ড সরানো হয়েছে। এখন রং নির্বাচন করুন।');URL.revokeObjectURL(u);b.disabled=false};
+im.onerror=()=>{msg('ফলাফল খোলা যায়নি।');b.disabled=false};im.src=u;
+}catch(e){console.error(e);msg('এটি চালু হয়নি। ইন্টারনেট ও আধুনিক ব্রাউজার দিয়ে আবার চেষ্টা করুন।');b.disabled=false}
+};
+function makeSheet(){
+if(!current){msg('আগে ছবি আপলোড করুন।');return false}
+let passport=$('kind').value==='passport',n=Math.min(60,Math.max(1,+$('copies').value||1)),W=2480,H=$('paper').value==='A4'?3508:4200;
+sheet.width=W;sheet.height=H;sctx.fillStyle='white';sctx.fillRect(0,0,W,H);
+let pw=(passport?35:25)/210*W,ph=(passport?45:30)/297*H,g=28;
+let cols=Math.max(1,Math.floor((W-100)/(pw+g))),rows=Math.ceil(n/cols);
+let tw=cols*pw+(cols-1)*g,th=rows*ph+(rows-1)*g,x0=(W-tw)/2,y0=Math.max(60,(H-th)/2);
+for(let i=0;i<n;i++){
+let x=x0+(i%cols)*(pw+g),y=y0+Math.floor(i/cols)*(ph+g);
+sctx.drawImage(canvas,x,y,pw,ph);sctx.strokeStyle='#aaa';sctx.strokeRect(x,y,pw,ph);
+}
+msg(`${n}টি ছবি শিটে সাজানো হয়েছে।`);return true;
+}
+$('make').onclick=makeSheet;
+$('print').onclick=()=>{if(makeSheet())window.print()};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));
+document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));
+if(b.dataset.tab==='print'&&current)makeSheet();
+});
+$('login').onclick=()=>alert('Customer Login বর্তমানে Demo। আসল অ্যাকাউন্টের জন্য নিরাপদ backend ও database প্রয়োজন।');
+$('admin').onclick=()=>alert('Admin Dashboard বর্তমানে Demo। আসল অ্যাডমিন নিয়ন্ত্রণের জন্য backend প্রয়োজন।');
+</script>
+</body>
+</html>

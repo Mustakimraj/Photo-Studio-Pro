@@ -1,564 +1,547 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="light">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Studio Pro - অনলাইন ফটো স্টুডিও</title>
-    <style>
-        :root {
-            --bg-main: #f1f5f9;
-            --bg-card: #ffffff;
-            --bg-sidebar: #1e293b;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --accent: #0ea5e9;
-            --success: #16a34a;
-            --canvas-bg: #e2e8f0;
-        }
-
-        [data-theme="dark"] {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --bg-sidebar: #020617;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --canvas-bg: #0f172a;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        /* Top Navbar */
-        .navbar {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 20px;
-            color: var(--primary);
-        }
-
-        .brand span.badge {
-            background: var(--primary);
-            color: #fff;
-            font-size: 11px;
-            padding: 2px 7px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .icon-btn {
-            background: var(--bg-main);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 7px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .icon-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* Main Studio Layout */
-        .studio-wrapper {
-            display: flex;
-            flex: 1;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 15px;
-            gap: 15px;
-        }
-
-        /* Left Tools Panel */
-        .tools-panel {
-            width: 320px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            height: fit-content;
-        }
-
-        .panel-title {
-            font-size: 15px;
-            font-weight: 700;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .step-indicator {
-            font-size: 12px;
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.1);
-            padding: 3px 8px;
-            border-radius: 12px;
-        }
-
-        /* Upload Box */
-        .upload-zone {
-            border: 2px dashed var(--primary);
-            border-radius: 10px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            background: rgba(37, 99, 235, 0.04);
-            transition: 0.2s;
-        }
-
-        .upload-zone:hover {
-            background: rgba(37, 99, 235, 0.09);
-        }
-
-        .upload-zone strong {
-            display: block;
-            font-size: 15px;
-            margin-bottom: 5px;
-            color: var(--primary);
-        }
-
-        .upload-zone small {
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        /* Image Info Card */
-        .info-card {
-            background: var(--bg-main);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            display: none;
-            flex-direction: column;
-            gap: 6px;
-            border: 1px solid var(--border-color);
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .info-row span:first-child {
-            color: var(--text-muted);
-        }
-
-        .info-row span:last-child {
-            font-weight: 600;
-        }
-
-        /* Action Buttons */
-        .btn {
-            width: 100%;
-            padding: 11px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* Upcoming Modules Roadmap inside Panel */
-        .roadmap-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 5px;
-        }
-
-        .roadmap-item {
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            font-size: 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-muted);
-            background: var(--bg-main);
-        }
-
-        .roadmap-item.active {
-            border-color: var(--primary);
-            color: var(--text-main);
-            font-weight: 600;
-            background: rgba(37, 99, 235, 0.06);
-        }
-
-        .status-tag {
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: var(--border-color);
-            color: var(--text-muted);
-        }
-
-        .active .status-tag {
-            background: var(--success);
-            color: #fff;
-        }
-
-        /* Center Canvas Workspace */
-        .workspace {
-            flex: 1;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            min-height: 500px;
-        }
-
-        .workspace-header {
-            padding: 12px 18px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .canvas-stage {
-            flex: 1;
-            background-color: var(--canvas-bg);
-            background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
-            background-size: 16px 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: relative;
-            overflow: auto;
-        }
-
-        .empty-state {
-            text-align: center;
-            max-width: 340px;
-            color: var(--text-muted);
-        }
-
-        .empty-state h3 {
-            color: var(--text-main);
-            margin-bottom: 8px;
-            font-size: 18px;
-        }
-
-        canvas {
-            max-width: 100%;
-            max-height: 70vh;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border-radius: 4px;
-            display: none;
-        }
-
-        /* Notification Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--success);
-            color: #fff;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: 0.3s;
-            z-index: 999;
-        }
-
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Responsive Mobile View */
-        @media (max-width: 820px) {
-            .studio-wrapper {
-                flex-direction: column;
-            }
-            .tools-panel {
-                width: 100%;
-            }
-            .workspace {
-                min-height: 380px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Photo Studio Pro</title>
+<style>
+:root {
+ --bg:#f3f5fa;--panel:#fff;--ink:#172033;
+ --muted:#758096;--primary:#4f46e5;--line:#e5e9f2;
+ --green:#059669;--red:#dc2626;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:Arial,"Noto Sans Bengali",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{max-width:1500px;margin:auto;padding:16px}
+header{background:#171d36;color:white;padding:17px 20px;
+ border-radius:15px;display:flex;justify-content:space-between;
+ align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:800}
+.brand small{display:block;font-size:11px;color:#b8c0e5;
+ margin-top:4px;font-weight:400}
+.header-actions{display:flex;gap:8px;align-items:center}
+.header-actions button{background:#303959;color:white;
+ padding:9px 12px;border-radius:8px}
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);
+ gap:15px;margin-top:16px}
+.panel{background:var(--panel);border:1px solid var(--line);
+ border-radius:13px;padding:16px;min-width:0}
+h3{font-size:15px;margin:0 0 13px}
+.section{margin-bottom:19px}
+label{display:block;font-size:12px;color:var(--muted);
+ margin:10px 0 5px}
+input,select{width:100%;padding:10px;border:1px solid var(--line);
+ border-radius:8px;background:white;color:var(--ink);min-width:0}
+input[type=color]{height:40px;padding:4px}
+input[type=range]{padding:0}
+.btn{padding:10px 12px;border-radius:8px;
+ background:#edf0ff;color:#3730a3;font-size:13px;font-weight:600}
+.btn.primary{background:var(--primary);color:white}
+.btn.green{background:#059669;color:white}
+.btn.dark{background:#222b45;color:white}
+.btn.danger{background:#fee2e2;color:#991b1b}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.buttons{display:flex;gap:7px;flex-wrap:wrap}
+.buttons .btn{flex:1}
+.upload{border:2px dashed #aab2d0;background:#f8f9ff;
+ padding:22px 10px;text-align:center;border-radius:12px;
+ cursor:pointer;color:#4f46e5;font-size:13px}
+.upload strong{display:block;font-size:25px;margin-bottom:7px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 290px;
+ gap:15px}
+.preview{background:#e9edf5;border-radius:12px;min-height:360px;
+ display:flex;align-items:center;justify-content:center;
+ overflow:hidden;padding:14px;position:relative}
+#photoCanvas{max-width:100%;max-height:490px;
+ object-fit:contain;background:white;box-shadow:0 3px 16px #0002}
+.empty{text-align:center;color:#8a93a8;font-size:14px}
+.empty strong{display:block;font-size:42px;margin-bottom:8px}
+.status{font-size:12px;color:var(--muted);margin-top:10px;
+ min-height:18px}
+.tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.tools button{flex:1;min-width:95px}
+.color-list{display:flex;gap:7px;flex-wrap:wrap}
+.color-dot{width:29px;height:29px;border-radius:50%;
+ border:2px solid #ddd;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);
+ gap:8px;margin-bottom:14px}
+.stat{padding:12px;background:#f6f7fc;border-radius:10px}
+.stat strong{font-size:18px;display:block}
+.stat span{font-size:11px;color:var(--muted)}
+.sheet-wrap{background:#e9edf5;border-radius:12px;padding:15px;
+ overflow:auto;text-align:center}
+#sheetCanvas{display:block;max-width:100%;height:auto;
+ margin:auto;background:white;box-shadow:0 3px 15px #0002}
+.note{font-size:11px;color:var(--muted);line-height:1.6}
+hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+.hidden{display:none!important}
+.tabs{display:flex;gap:8px;margin:14px 0}
+.tab{padding:9px 15px;border-radius:8px;background:white;
+ color:#555;font-size:13px}
+.tab.active{background:var(--primary);color:white}
+#message{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+ background:#18213a;color:white;padding:11px 18px;
+ border-radius:9px;font-size:13px;z-index:99;display:none;
+ max-width:90%;text-align:center}
+footer{text-align:center;padding:20px;color:#8991a3;font-size:11px}
+@media(max-width:900px){
+ .layout{grid-template-columns:1fr}
+ .workspace{grid-template-columns:1fr}
+ .preview{min-height:270px}
+}
+@media(max-width:480px){
+ .app{padding:8px}
+ header{padding:13px}
+ .brand{font-size:19px}
+ .panel{padding:12px}
+ .stats{grid-template-columns:repeat(3,1fr)}
+ .stat strong{font-size:15px}
+}
+@media print{
+ body{background:white}
+ header,.sidebar,.editor,.tabs,.print-hide,footer{display:none!important}
+ .app{padding:0;margin:0;max-width:none}
+ .layout,.workspace{display:block;margin:0}
+ .panel{border:0;padding:0}
+ .sheet-wrap{background:white;padding:0;overflow:visible}
+ #sheetCanvas{max-width:none!important;width:auto!important;
+ height:auto!important;max-height:none!important;
+ box-shadow:none!important}
+}
+</style>
 </head>
 <body>
+<div class="app">
+<header>
+ <div class="brand">📸 PHOTO STUDIO PRO
+  <small>Professional Photo Editing & Printing Studio</small>
+ </div>
+ <div class="header-actions">
+  <button onclick="toggleTheme()">◐ Theme</button>
+  <button onclick="resetAll()">Reset</button>
+ </div>
+</header>
 
-    <!-- Top Navigation -->
-    <nav class="navbar">
-        <div class="brand">
-            <span>📸 Photo Studio Pro</span>
-            <span class="badge">v1.0</span>
-        </div>
-        <div class="nav-actions">
-            <button class="icon-btn" id="langToggle">English</button>
-            <button class="icon-btn" id="themeToggle">🌙 Dark</button>
-        </div>
-    </nav>
+<div class="layout">
+<aside class="panel sidebar">
+ <div class="section">
+  <h3>📤 Upload Photo</h3>
+  <label class="upload" for="fileInput">
+   <strong>＋</strong>ছবি নির্বাচন করুন
+   <small>JPG, JPEG, PNG</small>
+  </label>
+  <input id="fileInput" type="file" accept="image/jpeg,image/png"
+   class="hidden">
+  <div class="status" id="fileStatus">কোনো ছবি নির্বাচন করা হয়নি</div>
+ </div>
 
-    <!-- Main Studio Dashboard -->
-    <div class="studio-wrapper">
-        
-        <!-- Left Control Panel -->
-        <aside class="tools-panel">
-            <div class="panel-title">
-                <span data-bn="স্টুডিও কন্ট্রোল" data-en="Studio Controls">স্টুডিও কন্ট্রোল</span>
-                <span class="step-indicator" data-bn="ধাপ ১-৩ সক্রিয়" data-en="Step 1-3 Active">ধাপ ১-৩ সক্রিয়</span>
-            </div>
+ <hr>
+ <div class="section">
+  <h3>✨ HD Photo Enhancement</h3>
+  <button class="btn green" style="width:100%" id="hdBtn">
+   ✨ HD CLEAR – ছবি পরিষ্কার করুন
+  </button>
+  <label>Brightness</label>
+  <input type="range" id="brightness" min="50" max="160" value="100">
+  <label>Contrast</label>
+  <input type="range" id="contrast" min="50" max="180" value="100">
+  <label>Sharpness</label>
+  <input type="range" id="sharpness" min="0" max="100" value="0">
+  <button class="btn" style="width:100%;margin-top:9px"
+   id="applyAdjust">Apply Adjustments</button>
+  <button class="btn" style="width:100%;margin-top:7px"
+   id="resetAdjust">Reset Adjustments</button>
+ </div>
 
-            <!-- Upload Input -->
-            <label class="upload-zone" for="photoInput" id="uploadZone">
-                <strong data-bn="📁 ছবি নির্বাচন করুন" data-en="📁 Select Photo">📁 ছবি নির্বাচন করুন</strong>
-                <small data-bn="JPG, JPEG বা PNG (মোবাইল বা কম্পিউটার)" data-en="JPG, JPEG or PNG (Mobile or PC)">JPG, JPEG বা PNG (মোবাইল বা কম্পিউটার)</small>
-            </label>
-            <input type="file" id="photoInput" accept="image/jpeg, image/jpg, image/png">
+ <hr>
+ <div class="section">
+  <h3>🎨 Background</h3>
+  <div class="color-list">
+   <button class="color-dot" style="background:white"
+    data-bg="#ffffff" title="White"></button>
+   <button class="color-dot" style="background:#1875d1"
+    data-bg="#1875d1" title="Blue"></button>
+   <button class="color-dot" style="background:red"
+    data-bg="#ff0000" title="Red"></button>
+   <button class="color-dot" style="background:#888"
+    data-bg="#888888" title="Gray"></button>
+  </div>
+  <label>Custom Background</label>
+  <input type="color" id="bgColor" value="#ffffff">
+  <button class="btn" id="applyBg" style="width:100%;margin-top:8px">
+   Apply Background
+  </button>
+  <label>Background Remove (Simple Color Key)</label>
+  <button class="btn" id="pickBg" style="width:100%">
+   ছবির ব্যাকগ্রাউন্ডের রং নির্বাচন করুন
+  </button>
+  <label>Color Tolerance</label>
+  <input type="range" id="tolerance" min="10" max="150" value="45">
+  <button class="btn" id="removeBg" style="width:100%;margin-top:8px">
+   Remove Selected Color
+  </button>
+  <p class="note">এটি কাছাকাছি রঙের পিক্সেল সরায়। জটিল ব্যাকগ্রাউন্ডের জন্য AI Background Removal প্রয়োজন।</p>
+ </div>
 
-            <!-- Uploaded Image Details -->
-            <div class="info-card" id="imageInfoCard">
-                <div class="info-row">
-                    <span data-bn="ফাইলের নাম:" data-en="File Name:">ফাইলের নাম:</span>
-                    <span id="fileName">-</span>
-                </div>
-                <div class="info-row">
-                    <span data-bn="আসল মাপ (Pixel):" data-en="Original Size:">আসল মাপ (Pixel):</span>
-                    <span id="fileDimensions">-</span>
-                </div>
-                <div class="info-row">
-                    <span data-bn="ফাইল সাইজ:" data-en="File Size:">ফাইল সাইজ:</span>
-                    <span id="fileSize">-</span>
-                </div>
-                <button class="btn btn-outline" id="changePhotoBtn" style="margin-top: 6px;" data-bn="🔄 অন্য ছবি পরিবর্তন করুন" data-en="🔄 Change Photo">🔄 অন্য ছবি পরিবর্তন করুন</button>
-            </div>
+ <hr>
+ <div class="section">
+  <h3>📐 Photo Size</h3>
+  <label>Photo Type</label>
+  <select id="photoSize">
+   <option value="35,45">Passport (35 × 45 mm)</option>
+   <option value="25,30">Stamp (25 × 30 mm)</option>
+   <option value="102,152">4R (102 × 152 mm)</option>
+   <option value="127,178">5R (127 × 178 mm)</option>
+   <option value="152,203">6R (152 × 203 mm)</option>
+   <option value="203,254">8R (203 × 254 mm)</option>
+   <option value="210,297">A4 (210 × 297 mm)</option>
+   <option value="216,356">Legal (216 × 356 mm)</option>
+   <option value="custom">Custom Size</option>
+  </select>
+  <div id="customSize" class="hidden">
+   <label>Width (mm)</label><input type="number" id="customW" value="35" min="1">
+   <label>Height (mm)</label><input type="number" id="customH" value="45" min="1">
+  </div>
+  <label>Resolution (DPI)</label>
+  <select id="dpi">
+   <option value="300">300 DPI – Print Quality</option>
+   <option value="240">240 DPI</option>
+   <option value="150">150 DPI</option>
+  </select>
+  <label>Crop Position</label>
+  <select id="cropMode">
+   <option value="cover">Fill Photo Size (Crop)</option>
+   <option value="contain">Fit Entire Photo</option>
+  </select>
+  <button class="btn primary" id="makePhoto" style="width:100%;margin-top:10px">
+   Create Photo
+  </button>
+ </div>
+</aside>
 
-            <!-- Active & Upcoming Modules -->
-            <div>
-                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;" data-bn="টুলস মডিউল তালিকা:" data-en="Tools Modules:">টুলস মডিউল তালিকা:</div>
-                <div class="roadmap-list">
-                    <div class="roadmap-item active">
-                        <span data-bn="১. ছবি আপলোড ও প্রিভিউ" data-en="1. Photo Upload & Preview">১. ছবি আপলোড ও প্রিভিউ</span>
-                        <span class="status-tag" data-bn="চালু" data-en="Ready">চালু</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span data-bn="২. ব্যাকগ্রাউন্ড এডিটিং" data-en="2. Background Editing">২. ব্যাকগ্রাউন্ড এডিটিং</span>
-                        <span class="status-tag" data-bn="পরবর্তী ধাপ" data-en="Next">পরবর্তী ধাপ</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span data-bn="৩. ন্যাচারাল ফেস রিটাচ" data-en="3. Natural Face Retouch">৩. ন্যাচারাল ফেস রিটাচ</span>
-                        <span class="status-tag" data-bn="ধাপ ৫" data-en="Step 5">ধাপ ৫</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span data-bn="৪. পাসপোর্ট ও স্ট্যাম্প ক্রপ" data-en="4. Passport & Stamp Crop">৪. পাসপোর্ট ও স্ট্যাম্প ক্রপ</span>
-                        <span class="status-tag" data-bn="ধাপ ৬-৭" data-en="Step 6-7">ধাপ ৬-৭</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span data-bn="৫. প্রিন্ট লেআউট ও A4 শিট" data-en="5. Print Layout & A4 Sheet">৫. প্রিন্ট লেআউট ও A4 শিট</span>
-                        <span class="status-tag" data-bn="ধাপ ৮-৯" data-en="Step 8-9">ধাপ ৮-৯</span>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Center Preview Workspace -->
-        <main class="workspace">
-            <div class="workspace-header">
-                <span id="workspaceStatus" data-bn="অবস্থা: ছবির জন্য অপেক্ষা করছে..." data-en="Status: Waiting for photo...">অবস্থা: ছবির জন্য অপেক্ষা করছে...</span>
-                <span data-bn="৩০০ DPI প্রিন্ট রেডি ইঞ্জিন" data-en="300 DPI Print Ready Engine">৩০০ DPI প্রিন্ট রেডি ইঞ্জিন</span>
-            </div>
-
-            <div class="canvas-stage">
-                <div class="empty-state" id="emptyState">
-                    <div style="font-size: 42px; margin-bottom: 10px;">🖼️</div>
-                    <h3 data-bn="আপনার ছবি এখানে প্রিভিউ হবে" data-en="Your Photo Preview Area">আপনার ছবি এখানে প্রিভিউ হবে</h3>
-                    <p style="font-size: 13px; line-height: 1.5;" data-bn="বাম পাশের 'ছবি নির্বাচন করুন' বাটনে চাপ দিয়ে আপনার মোবাইল বা কম্পিউটার থেকে পরিষ্কার একটি ছবি আপলোড করুন।" data-en="Click 'Select Photo' to upload a clear image from your mobile or computer.">বাম পাশের 'ছবি নির্বাচন করুন' বাটনে চাপ দিয়ে আপনার মোবাইল বা কম্পিউটার থেকে পরিষ্কার একটি ছবি আপলোড করুন।</p>
-                </div>
-                <canvas id="studioCanvas"></canvas>
-            </div>
-        </main>
-
+<main>
+ <div class="workspace">
+  <section class="panel editor">
+   <h3>🖼️ Photo Editor</h3>
+   <div class="preview" id="preview">
+    <div class="empty" id="empty">
+     <strong>📷</strong>প্রথমে আপনার ছবি Upload করুন
     </div>
+    <canvas id="photoCanvas" class="hidden"></canvas>
+   </div>
+   <div class="tools">
+    <button class="btn" id="rotate">↻ Rotate</button>
+    <button class="btn" id="flip">↔ Flip</button>
+    <button class="btn" id="undo">↶ Undo</button>
+    <button class="btn" id="downloadPhoto">↓ JPG</button>
+    <button class="btn" id="downloadPNG">↓ PNG</button>
+    <button class="btn" id="copyPhoto">▣ Copy</button>
+   </div>
+   <div class="status" id="editStatus">আপনার ছবি এখানে Preview হবে</div>
+  </section>
 
-    <!-- Notification Toast -->
-    <div class="toast" id="toastMsg">ছবি সফলভাবে লোড হয়েছে!</div>
+  <section class="panel">
+   <h3>📋 Photo Information</h3>
+   <div class="stats">
+    <div class="stat"><strong id="originalW">0</strong><span>Width px</span></div>
+    <div class="stat"><strong id="originalH">0</strong><span>Height px</span></div>
+    <div class="stat"><strong id="photoDpi">300</strong><span>DPI</span></div>
+   </div>
+   <hr>
+   <h3>🖨️ Export Settings</h3>
+   <label>File Quality</label>
+   <input type="range" id="quality" min="50" max="100" value="95">
+   <div class="status"><span id="qualityValue">95%</span> JPG Quality</div>
+   <label>Output Format</label>
+   <select id="format">
+    <option value="image/jpeg">JPG</option>
+    <option value="image/png">PNG</option>
+   </select>
+   <hr>
+   <h3>⚡ Quick Actions</h3>
+   <button class="btn primary" id="quickPrint" style="width:100%">
+    🖨️ Print Photo
+   </button>
+   <button class="btn" id="goLayout" style="width:100%;margin-top:8px">
+    📄 Create Page Layout
+   </button>
+   <p class="note">পরিবর্তনের পর Preview পরীক্ষা করে Print করুন।</p>
+  </section>
+ </div>
 
-    <script>
-        // Elements
-        const photoInput = document.getElementById('photoInput');
-        const uploadZone = document.getElementById('uploadZone');
-        const imageInfoCard = document.getElementById('imageInfoCard');
-        const changePhotoBtn = document.getElementById('changePhotoBtn');
-        const studioCanvas = document.getElementById('studioCanvas');
-        const ctx = studioCanvas.getContext('2d');
-        const emptyState = document.getElementById('emptyState');
-        const workspaceStatus = document.getElementById('workspaceStatus');
-        const toastMsg = document.getElementById('toastMsg');
+ <div class="tabs print-hide">
+  <button class="tab active" data-tab="layoutTab">📄 Print Layout</button>
+  <button class="tab" data-tab="settingsTab">⚙️ Layout Settings</button>
+ </div>
 
-        // Metadata fields
-        const fileNameEl = document.getElementById('fileName');
-        const fileDimensionsEl = document.getElementById('fileDimensions');
-        const fileSizeEl = document.getElementById('fileSize');
+ <section class="panel" id="layoutTab">
+  <h3>📄 Photo Printing Layout</h3>
+  <div class="sheet-wrap">
+   <canvas id="sheetCanvas"></canvas>
+   <div id="sheetEmpty" class="empty" style="padding:35px">
+    <strong>📃</strong>প্রথমে ছবি তৈরি করুন
+   </div>
+  </div>
+  <div class="tools print-hide">
+   <button class="btn primary" id="printPage">🖨️ Print Page</button>
+   <button class="btn" id="downloadSheet">↓ Save JPG</button>
+   <button class="btn" id="copySheet">▣ Copy Page</button>
+  </div>
+  <div class="status" id="layoutStatus"></div>
+ </section>
 
-        // Theme & Language state
-        let currentLang = 'bn';
-        const themeToggle = document.getElementById('themeToggle');
-        const langToggle = document.getElementById('langToggle');
+ <section class="panel hidden" id="settingsTab">
+  <h3>⚙️ Page Layout Settings</h3>
+  <label>Paper Size</label>
+  <select id="paperSize">
+   <option value="210,297">A4 (210 × 297 mm)</option>
+   <option value="216,356">Legal (216 × 356 mm)</option>
+   <option value="102,152">4R (102 × 152 mm)</option>
+   <option value="127,178">5R (127 × 178 mm)</option>
+   <option value="152,203">6R (152 × 203 mm)</option>
+   <option value="203,254">8R (203 × 254 mm)</option>
+   <option value="custom">Custom Paper</option>
+  </select>
+  <div id="customPaper" class="hidden">
+   <label>Paper Width (mm)</label><input id="paperW" type="number" value="210" min="1">
+   <label>Paper Height (mm)</label><input id="paperH" type="number" value="297" min="1">
+  </div>
+  <label>Number of Photos / Copies</label>
+  <input type="number" id="copies" value="4" min="1" max="500">
+  <label>Photos Per Row (Columns)</label>
+  <input type="number" id="columns" value="4" min="1" max="30">
+  <label>Gap Between Photos (mm)</label>
+  <input type="number" id="gap" value="2" min="0" max="30" step=".5">
+  <label>Page Margin (mm)</label>
+  <input type="number" id="margin" value="5" min="0" max="40" step=".5">
+  <label>Horizontal Position</label>
+  <select id="alignment">
+   <option value="left">Top Left</option>
+   <option value="center">Top Center</option>
+  </select>
+  <button class="btn primary" id="generateLayout" style="width:100%;margin-top:14px">
+   Generate Print Layout
+  </button>
+  <p class="note">৪টি কপি দিলে ৪টি কলাম এবং ৫টি কপি দিলে ৫টি কলাম স্বয়ংক্রিয়ভাবে নির্বাচন হবে। প্রয়োজনে Columns নিজে পরিবর্তন করতে পারবেন।</p>
+ </section>
+</main>
+</div>
+<footer>PHOTO STUDIO PRO • Browser-based Photo Editing & Printing</footer>
+</div>
+<div id="message"></div>
 
-        // Show Notification
-        function showToast(msg) {
-            toastMsg.textContent = msg;
-            toastMsg.classList.add('show');
-            setTimeout(() => toastMsg.classList.remove('show'), 3000);
-        }
+<script>
+"use strict";
 
-        // Photo Upload Handler
-        photoInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+const $=id=>document.getElementById(id);
+const photo=$("photoCanvas"),ctx=photo.getContext("2d",{willReadFrequently:true});
+const sheet=$("sheetCanvas"),sctx=sheet.getContext("2d");
+let source=null,original=null,history=[];
+let bg="#ffffff",bgPixels=null,generated=false,photoW=35,photoH=45;
+let rotation=0,flipped=false,editData=null;
 
-            // Validate Format
-            if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-                alert(currentLang === 'bn' ? 'দয়া করে শুধু JPG বা PNG ছবি আপলোড করুন।' : 'Please upload JPG or PNG image only.');
-                return;
-            }
+const mmPx=(mm,dpi)=>Math.round(mm*dpi/25.4);
+function say(t){
+ const m=$("message");m.textContent=t;m.style.display="block";
+ clearTimeout(say.timer);say.timer=setTimeout(()=>m.style.display="none",2600);
+}
+function requirePhoto(){
+ if(!source){say("আগে একটি ছবি Upload করুন");return false}return true;
+}
+function saveHistory(){
+ if(!source)return;
+ history.push({
+  width:photo.width,height:photo.height,
+  data:ctx.getImageData(0,0,photo.width,photo.height)
+ });
+ if(history.length>5)history.shift();
+}
+function loadImage(file){
+ if(!file)return;
+ if(!/^image\/(jpeg|png)$/.test(file.type)){
+  say("শুধু JPG অথবা PNG ছবি নির্বাচন করুন");return;
+ }
+ if(file.size>25*1024*1024){say("সর্বোচ্চ ২৫ MB ছবি Upload করুন");return}
+ const url=URL.createObjectURL(file);
+ const img=new Image();
+ img.onload=()=>{
+  source=img;original=img;rotation=0;flipped=false;history=[];
+  const max=2400,scale=Math.min(1,max/Math.max(img.width,img.height));
+  photo.width=Math.round(img.width*scale);
+  photo.height=Math.round(img.height*scale);
+  ctx.clearRect(0,0,photo.width,photo.height);
+  ctx.drawImage(img,0,0,photo.width,photo.height);
+  editData=ctx.getImageData(0,0,photo.width,photo.height);
+  bgPixels=null;bg="#ffffff";
+  $("bgColor").value=bg;
+  $("empty").classList.add("hidden");
+  photo.classList.remove("hidden");
+  $("originalW").textContent=img.width;
+  $("originalH").textContent=img.height;
+  $("fileStatus").textContent=file.name;
+  $("editStatus").textContent="ছবি Upload সফল হয়েছে";
+  generated=false;clearSheet();
+  $("brightness").value=100;$("contrast").value=100;
+  $("sharpness").value=0;
+  URL.revokeObjectURL(url);
+  say("ছবি সফলভাবে Upload হয়েছে");
+ };
+ img.onerror=()=>{URL.revokeObjectURL(url);say("ছবি খোলা যায়নি")};
+ img.src=url;
+}
+$("fileInput").addEventListener("change",e=>loadImage(e.target.files[0]));
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() {
-                    // Set exact original resolution without losing quality
-                    studioCanvas.width = img.width;
-                    studioCanvas.height = img.height;
-                    ctx.clearRect(0, 0, studioCanvas.width, studioCanvas.height);
-                    ctx.drawImage(img, 0, 0);
+function drawBase(){
+ if(!requirePhoto())return;
+ saveHistory();
+ ctx.clearRect(0,0,photo.width,photo.height);
+ ctx.fillStyle=bg;ctx.fillRect(0,0,photo.width,photo.height);
+ ctx.save();
+ ctx.translate(photo.width/2,photo.height/2);
+ ctx.scale(flipped?-1:1,1);
+ ctx.rotate(rotation*Math.PI/180);
+ let w=photo.width,h=photo.height;
+ if(Math.abs(rotation)%180===90){[w,h]=[h,w]}
+ const scale=Math.max(photo.width/w,photo.height/h);
+ ctx.drawImage(source,-w*scale/2,-h*scale/2,w*scale,h*scale);
+ ctx.restore();
+}
+function applyFilters(){
+ if(!requirePhoto())return;
+ saveHistory();
+ const b=Number($("brightness").value)/100;
+ const c=Number($("contrast").value)/100;
+ const sharp=Number($("sharpness").value);
+ const temp=document.createElement("canvas");
+ temp.width=photo.width;temp.height=photo.height;
+ const t=temp.getContext("2d");
+ t.filter=`brightness(${b}) contrast(${c})`;
+ t.drawImage(photo,0,0);
+ ctx.clearRect(0,0,photo.width,photo.height);
+ ctx.drawImage(temp,0,0);
+ if(sharp>0)unsharp(sharp/100);
+ $("editStatus").textContent="Image adjustments applied";
+ invalidate();
+}
+function unsharp(amount){
+ const w=photo.width,h=photo.height;
+ const originalData=ctx.getImageData(0,0,w,h);
+ const src=originalData.data;
+ const copy=new Uint8ClampedArray(src);
+ const strength=amount*.8;
+ for(let y=1;y<h-1;y++){
+  for(let x=1;x<w-1;x++){
+   let i=(y*w+x)*4;
+   for(let c=0;c<3;c++){
+    let blur=(copy[i-4+c]+copy[i+4+c]+
+     copy[i-w*4+c]+copy[i+w*4+c])/4;
+    src[i+c]=Math.max(0,Math.min(255,
+     copy[i+c]+(copy[i+c]-blur)*strength));
+   }
+  }
+ }
+ ctx.putImageData(originalData,0,0);
+}
+function invalidate(){generated=false;clearSheet()}
+$("applyAdjust").onclick=applyFilters;
+$("resetAdjust").onclick=()=>{
+ if(!requirePhoto())return;
+ ctx.putImageData(editData,0,0);
+ $("brightness").value=100;$("contrast").value=100;
+ $("sharpness").value=0;invalidate();say("Adjustments Reset হয়েছে");
+};
+$("hdBtn").onclick=()=>{
+ if(!requirePhoto())return;
+ $("brightness").value=105;
+ $("contrast").value=112;
+ $("sharpness").value=55;
+ applyFilters();
+ $("editStatus").textContent="HD Clear Enhancement সম্পন্ন";
+ say("ছবির Clarity ও Sharpness উন্নত করা হয়েছে");
+};
+document.querySelectorAll("[data-bg]").forEach(btn=>{
+ btn.onclick=()=>{$("bgColor").value=btn.dataset.bg;applyBackground()};
+});
+$("applyBg").onclick=applyBackground;
+function applyBackground(){
+ if(!requirePhoto())return;
+ bg=$("bgColor").value;
+ if(bgPixels){
+  const d=ctx.getImageData(0,0,photo.width,photo.height);
+  for(let i=0;i<d.data.length;i+=4){
+   if(d.data[i+3]<255){
+    const rgb=hexRgb(bg);
+    d.data[i]=rgb[0];d.data[i+1]=rgb[1];d.data[i+2]=rgb[2];
+    d.data[i+3]=255;
+   }
+  }
+  ctx.putImageData(d,0,0);bgPixels=null;
+ }else{
+  say("Opaque ছবিতে Background বদলাতে আগে Remove Selected Color ব্যবহার করুন");
+  return;
+ }
+ invalidate();say("Background পরিবর্তন হয়েছে");
+}
+function hexRgb(hex){
+ return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),
+ parseInt(hex.slice(5,7),16)];
+}
+let picking=false;
+$("pickBg").onclick=()=>{
+ if(!requirePhoto())return;
+ picking=true;$("pickBg").textContent="ছবির Background-এ ক্লিক করুন";
+ say("Preview-তে Background-এর রঙের ওপর ক্লিক করুন");
+};
+photo.addEventListener("click",e=>{
+ if(!picking)return;
+ const r=photo.getBoundingClientRect();
+ const x=Math.floor((e.clientX-r.left)*photo.width/r.width);
+ const y=Math.floor((e.clientY-r.top)*photo.height/r.height);
+ const p=ctx.getImageData(x,y,1,1).data;
+ $("bgColor").value="#"+[p[0],p[1],p[2]].map(v=>v.toString(16).padStart(2,"0")).join("");
+ picking=false;$("pickBg").textContent="ছবির ব্যাকগ্রাউন্ডের রং নির্বাচন করুন";
+ say("রং নির্বাচন হয়েছে। Remove Selected Color চাপুন");
+});
+$("removeBg").onclick=()=>{
+ if(!requirePhoto())return;
+ saveHistory();
+ const target=hexRgb($("bgColor").value);
+ const d=ctx.getImageData(0,0,photo.width,photo.height);
+ const data=d.data,tol=Number($("tolerance").value);
+ for(let i=0;i<data.length;i+=4){
+  const dist=Math.sqrt(
+   (data[i]-target[0])**2+
+   (data[i+1]-target[1])**2+
+   (data[i+2]-target[2])**2);
+  if(dist<tol)data[i+3]=0;
+  else if(dist<tol+15)data[i+3]=Math.round(data[i+3]*(dist-tol)/15);
+ }
+ ctx.putImageData(d,0,0);bgPixels=true;invalidate();
+ say("Selected color সরানো হয়েছে");
+};
+$("rotate").onclick=()=>{
+ if(!requirePhoto())return;
+ rotation=(rotation+90)%360;drawBase();invalidate();
+};
+$("flip").onclick=()=>{
+ if(!requirePhoto())return;
+ flipped=!flipped;drawBase();invalidate();
+};
+$("undo").onclick=()=>{
+ if(!history.length){say("Undo করার মতো কাজ নেই");return}
+ const last=history.pop();
+ photo.width=last.width;photo.height=last.height;
+ ctx.putImageData(last.data,0,0);invalidate();say("Undo সম্পন্ন");
+};
 
-                    // UI Updates
-                    emptyState.style.display = 'none';
-                    studioCanvas.style.display = 'block';
-                    uploadZone.style.display = 'none';
-                    imageInfoCard.style.display = 'flex';
-
-                    // Display Image Info
-                    fileNameEl.textContent = file.name.length > 18 ? file.name.substring(0, 15) + '...' : file.name;
-                    fileDimensionsEl.textContent = `${img.width} × ${img.height} px`;
-                    fileSizeEl.textContent = (file.size / 1024).toFixed(1) + ' KB';
-
-                    workspaceStatus.textContent = currentLang === 'bn' 
-                        ? 'অবস্থা: মূল ছবি লোড সম্পন্ন (আসল মান অক্ষুণ্ণ)' 
-                        : 'Status: Original Photo Loaded (Quality Preserved)';
-
-                    showToast(currentLang === 'bn' ? 'ছবি সফলভাবে আপলোড হয়েছে!' : 'Photo uploaded successfully!');
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
-
-        // Change Photo Button
-        changePhotoBtn.addEventListener('click', () => {
-            photoInput.click();
-        });
-
-        // Dark / Light Mode Toggle
-        themeToggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            themeToggle.textContent = isDark ? '🌙 Dark' : '☀️ Light';
-        });
-
-        // Bangla / English Language Toggle
-        langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'bn' ? 'en' : 'bn';
-            langToggle.textContent = currentLang === 'bn' ? 'English' : 'বাংলা';
-            
-            document.querySelectorAll('[data-bn]').forEach(el => {
-                el.textContent = el.getAttribute(`data-${currentLang}`);
-            });
-        });
-    </script>
-</body>
-</html>
+function getPhotoSize(){
+ if($("photoSize").value==="custom"){
+  return [Number($("customW").value),Number($("customH").value)];
+ }
+ return $("photoSize").value.split(",").map(Number);
+}
+$("photoSize").onchange=()=>{
+ $("customSize").classList.toggle("

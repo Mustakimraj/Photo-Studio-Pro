@@ -1,182 +1,564 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Studio Pro</title>
+    <title>Photo Studio Pro - অনলাইন ফটো স্টুডিও</title>
     <style>
+        :root {
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-sidebar: #1e293b;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #0ea5e9;
+            --success: #16a34a;
+            --canvas-bg: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-sidebar: #020617;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --canvas-bg: #0f172a;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
+
         body {
-            background-color: #f4f7f6;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             min-height: 100vh;
-        }
-        header {
-            margin-bottom: 25px;
-            text-align: center;
-        }
-        h1 {
-            color: #2c3e50;
-            font-size: 26px;
-            margin-bottom: 5px;
-        }
-        p {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-        .container {
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            width: 100%;
-            max-width: 500px;
             display: flex;
             flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .brand span.badge {
+            background: var(--primary);
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: var(--bg-main);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 7px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Main Studio Layout */
+        .studio-wrapper {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+            gap: 15px;
+        }
+
+        /* Left Tools Panel */
+        .tools-panel {
+            width: 320px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: fit-content;
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        .upload-box {
-            border: 2px dashed #3498db;
-            padding: 20px;
+
+        .step-indicator {
+            font-size: 12px;
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+
+        /* Upload Box */
+        .upload-zone {
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 25px 15px;
             text-align: center;
-            width: 100%;
-            border-radius: 8px;
             cursor: pointer;
-            background: #ecfdf5;
-            margin-bottom: 20px;
-            transition: 0.3s;
+            background: rgba(37, 99, 235, 0.04);
+            transition: 0.2s;
         }
-        .upload-box:hover {
-            background: #e0f2fe;
+
+        .upload-zone:hover {
+            background: rgba(37, 99, 235, 0.09);
         }
+
+        .upload-zone strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .upload-zone small {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
         input[type="file"] {
             display: none;
         }
-        .preview-container {
+
+        /* Image Info Card */
+        .info-card {
+            background: var(--bg-main);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-row span:first-child {
+            color: var(--text-muted);
+        }
+
+        .info-row span:last-child {
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .btn {
             width: 100%;
+            padding: 11px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Upcoming Modules Roadmap inside Panel */
+        .roadmap-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .roadmap-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            background: var(--bg-main);
+        }
+
+        .roadmap-item.active {
+            border-color: var(--primary);
+            color: var(--text-main);
+            font-weight: 600;
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        .status-tag {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .active .status-tag {
+            background: var(--success);
+            color: #fff;
+        }
+
+        /* Center Canvas Workspace */
+        .workspace {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 500px;
+        }
+
+        .workspace-header {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .canvas-stage {
+            flex: 1;
+            background-color: var(--canvas-bg);
+            background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+            background-size: 16px 16px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
-            min-height: 200px;
-            background: #D9F0FA;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            overflow: hidden;
+            padding: 20px;
             position: relative;
+            overflow: auto;
         }
+
+        .empty-state {
+            text-align: center;
+            max-width: 340px;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
         canvas {
             max-width: 100%;
-            height: auto;
-            display: block;
+            max-height: 70vh;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            display: none;
         }
-        .placeholder-text {
-            color: #64748b;
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
             font-size: 14px;
-            position: absolute;
-        }
-        .btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(100px);
+            opacity: 0;
             transition: 0.3s;
-            font-weight: bold;
-            margin-top: 10px;
+            z-index: 999;
         }
-        .btn:hover {
-            background-color: #2980b9;
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
         }
-        .btn-success {
-            background-color: #27ae60;
-        }
-        .btn-success:hover {
-            background-color: #219653;
+
+        /* Responsive Mobile View */
+        @media (max-width: 820px) {
+            .studio-wrapper {
+                flex-direction: column;
+            }
+            .tools-panel {
+                width: 100%;
+            }
+            .workspace {
+                min-height: 380px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Photo Studio Pro</h1>
-        <p>পাসপোর্ট ও এনআইডি সাইজ ছবি প্রসেসিং অ্যাপ</p>
-    </header>
-
-    <div class="container">
-        <!-- Upload Area -->
-        <label class="upload-box" for="imageInput">
-            <strong>📁 ছবি আপলোড করতে এখানে ক্লিক করুন</strong>
-            <p style="margin-top: 5px; font-size: 12px;">জেপিজি বা পিএনজি ফাইল</p>
-        </label>
-        <input type="file" id="imageInput" accept="image/*">
-
-        <!-- Preview Area -->
-        <div class="preview-container" id="previewArea">
-            <span class="placeholder-text" id="placeholderText">ছবির প্রিভিউ এখানে দেখা যাবে (ব্যাকগ্রাউন্ড #D9F0FA)</span>
-            <canvas id="imageCanvas"></canvas>
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <span>📸 Photo Studio Pro</span>
+            <span class="badge">v1.0</span>
         </div>
+        <div class="nav-actions">
+            <button class="icon-btn" id="langToggle">English</button>
+            <button class="icon-btn" id="themeToggle">🌙 Dark</button>
+        </div>
+    </nav>
 
-        <!-- Download Button -->
-        <button class="btn btn-success" id="downloadBtn" style="display: none;">ছবি ডাউনলোড করুন</button>
+    <!-- Main Studio Dashboard -->
+    <div class="studio-wrapper">
+        
+        <!-- Left Control Panel -->
+        <aside class="tools-panel">
+            <div class="panel-title">
+                <span data-bn="স্টুডিও কন্ট্রোল" data-en="Studio Controls">স্টুডিও কন্ট্রোল</span>
+                <span class="step-indicator" data-bn="ধাপ ১-৩ সক্রিয়" data-en="Step 1-3 Active">ধাপ ১-৩ সক্রিয়</span>
+            </div>
+
+            <!-- Upload Input -->
+            <label class="upload-zone" for="photoInput" id="uploadZone">
+                <strong data-bn="📁 ছবি নির্বাচন করুন" data-en="📁 Select Photo">📁 ছবি নির্বাচন করুন</strong>
+                <small data-bn="JPG, JPEG বা PNG (মোবাইল বা কম্পিউটার)" data-en="JPG, JPEG or PNG (Mobile or PC)">JPG, JPEG বা PNG (মোবাইল বা কম্পিউটার)</small>
+            </label>
+            <input type="file" id="photoInput" accept="image/jpeg, image/jpg, image/png">
+
+            <!-- Uploaded Image Details -->
+            <div class="info-card" id="imageInfoCard">
+                <div class="info-row">
+                    <span data-bn="ফাইলের নাম:" data-en="File Name:">ফাইলের নাম:</span>
+                    <span id="fileName">-</span>
+                </div>
+                <div class="info-row">
+                    <span data-bn="আসল মাপ (Pixel):" data-en="Original Size:">আসল মাপ (Pixel):</span>
+                    <span id="fileDimensions">-</span>
+                </div>
+                <div class="info-row">
+                    <span data-bn="ফাইল সাইজ:" data-en="File Size:">ফাইল সাইজ:</span>
+                    <span id="fileSize">-</span>
+                </div>
+                <button class="btn btn-outline" id="changePhotoBtn" style="margin-top: 6px;" data-bn="🔄 অন্য ছবি পরিবর্তন করুন" data-en="🔄 Change Photo">🔄 অন্য ছবি পরিবর্তন করুন</button>
+            </div>
+
+            <!-- Active & Upcoming Modules -->
+            <div>
+                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;" data-bn="টুলস মডিউল তালিকা:" data-en="Tools Modules:">টুলস মডিউল তালিকা:</div>
+                <div class="roadmap-list">
+                    <div class="roadmap-item active">
+                        <span data-bn="১. ছবি আপলোড ও প্রিভিউ" data-en="1. Photo Upload & Preview">১. ছবি আপলোড ও প্রিভিউ</span>
+                        <span class="status-tag" data-bn="চালু" data-en="Ready">চালু</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span data-bn="২. ব্যাকগ্রাউন্ড এডিটিং" data-en="2. Background Editing">২. ব্যাকগ্রাউন্ড এডিটিং</span>
+                        <span class="status-tag" data-bn="পরবর্তী ধাপ" data-en="Next">পরবর্তী ধাপ</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span data-bn="৩. ন্যাচারাল ফেস রিটাচ" data-en="3. Natural Face Retouch">৩. ন্যাচারাল ফেস রিটাচ</span>
+                        <span class="status-tag" data-bn="ধাপ ৫" data-en="Step 5">ধাপ ৫</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span data-bn="৪. পাসপোর্ট ও স্ট্যাম্প ক্রপ" data-en="4. Passport & Stamp Crop">৪. পাসপোর্ট ও স্ট্যাম্প ক্রপ</span>
+                        <span class="status-tag" data-bn="ধাপ ৬-৭" data-en="Step 6-7">ধাপ ৬-৭</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span data-bn="৫. প্রিন্ট লেআউট ও A4 শিট" data-en="5. Print Layout & A4 Sheet">৫. প্রিন্ট লেআউট ও A4 শিট</span>
+                        <span class="status-tag" data-bn="ধাপ ৮-৯" data-en="Step 8-9">ধাপ ৮-৯</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Preview Workspace -->
+        <main class="workspace">
+            <div class="workspace-header">
+                <span id="workspaceStatus" data-bn="অবস্থা: ছবির জন্য অপেক্ষা করছে..." data-en="Status: Waiting for photo...">অবস্থা: ছবির জন্য অপেক্ষা করছে...</span>
+                <span data-bn="৩০০ DPI প্রিন্ট রেডি ইঞ্জিন" data-en="300 DPI Print Ready Engine">৩০০ DPI প্রিন্ট রেডি ইঞ্জিন</span>
+            </div>
+
+            <div class="canvas-stage">
+                <div class="empty-state" id="emptyState">
+                    <div style="font-size: 42px; margin-bottom: 10px;">🖼️</div>
+                    <h3 data-bn="আপনার ছবি এখানে প্রিভিউ হবে" data-en="Your Photo Preview Area">আপনার ছবি এখানে প্রিভিউ হবে</h3>
+                    <p style="font-size: 13px; line-height: 1.5;" data-bn="বাম পাশের 'ছবি নির্বাচন করুন' বাটনে চাপ দিয়ে আপনার মোবাইল বা কম্পিউটার থেকে পরিষ্কার একটি ছবি আপলোড করুন।" data-en="Click 'Select Photo' to upload a clear image from your mobile or computer.">বাম পাশের 'ছবি নির্বাচন করুন' বাটনে চাপ দিয়ে আপনার মোবাইল বা কম্পিউটার থেকে পরিষ্কার একটি ছবি আপলোড করুন।</p>
+                </div>
+                <canvas id="studioCanvas"></canvas>
+            </div>
+        </main>
+
     </div>
 
+    <!-- Notification Toast -->
+    <div class="toast" id="toastMsg">ছবি সফলভাবে লোড হয়েছে!</div>
+
     <script>
-        const imageInput = document.getElementById('imageInput');
-        const imageCanvas = document.getElementById('imageCanvas');
-        const ctx = imageCanvas.getContext('2d');
-        const placeholderText = document.getElementById('placeholderText');
-        const downloadBtn = document.getElementById('downloadBtn');
+        // Elements
+        const photoInput = document.getElementById('photoInput');
+        const uploadZone = document.getElementById('uploadZone');
+        const imageInfoCard = document.getElementById('imageInfoCard');
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
+        const studioCanvas = document.getElementById('studioCanvas');
+        const ctx = studioCanvas.getContext('2d');
+        const emptyState = document.getElementById('emptyState');
+        const workspaceStatus = document.getElementById('workspaceStatus');
+        const toastMsg = document.getElementById('toastMsg');
 
-        let uploadedImage = new Image();
+        // Metadata fields
+        const fileNameEl = document.getElementById('fileName');
+        const fileDimensionsEl = document.getElementById('fileDimensions');
+        const fileSizeEl = document.getElementById('fileSize');
 
-        imageInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImage.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
+        // Theme & Language state
+        let currentLang = 'bn';
+        const themeToggle = document.getElementById('themeToggle');
+        const langToggle = document.getElementById('langToggle');
+
+        // Show Notification
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toastMsg.classList.add('show');
+            setTimeout(() => toastMsg.classList.remove('show'), 3000);
+        }
+
+        // Photo Upload Handler
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Validate Format
+            if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+                alert(currentLang === 'bn' ? 'দয়া করে শুধু JPG বা PNG ছবি আপলোড করুন।' : 'Please upload JPG or PNG image only.');
+                return;
             }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    // Set exact original resolution without losing quality
+                    studioCanvas.width = img.width;
+                    studioCanvas.height = img.height;
+                    ctx.clearRect(0, 0, studioCanvas.width, studioCanvas.height);
+                    ctx.drawImage(img, 0, 0);
+
+                    // UI Updates
+                    emptyState.style.display = 'none';
+                    studioCanvas.style.display = 'block';
+                    uploadZone.style.display = 'none';
+                    imageInfoCard.style.display = 'flex';
+
+                    // Display Image Info
+                    fileNameEl.textContent = file.name.length > 18 ? file.name.substring(0, 15) + '...' : file.name;
+                    fileDimensionsEl.textContent = `${img.width} × ${img.height} px`;
+                    fileSizeEl.textContent = (file.size / 1024).toFixed(1) + ' KB';
+
+                    workspaceStatus.textContent = currentLang === 'bn' 
+                        ? 'অবস্থা: মূল ছবি লোড সম্পন্ন (আসল মান অক্ষুণ্ণ)' 
+                        : 'Status: Original Photo Loaded (Quality Preserved)';
+
+                    showToast(currentLang === 'bn' ? 'ছবি সফলভাবে আপলোড হয়েছে!' : 'Photo uploaded successfully!');
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
         });
 
-        uploadedImage.onload = function() {
-            // Set precise canvas dimensions matching original proportions
-            imageCanvas.width = uploadedImage.width;
-            imageCanvas.height = uploadedImage.height;
+        // Change Photo Button
+        changePhotoBtn.addEventListener('click', () => {
+            photoInput.click();
+        });
 
-            // Fill background with light sky-blue (#D9F0FA)
-            ctx.fillStyle = '#D9F0FA';
-            ctx.fillRect(0, 0, imageCanvas.width, imageCanvas.height);
+        // Dark / Light Mode Toggle
+        themeToggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            themeToggle.textContent = isDark ? '🌙 Dark' : '☀️ Light';
+        });
 
-            // Draw original photo over it
-            ctx.drawImage(uploadedImage, 0, 0);
-
-            // Hide placeholder and show download button
-            placeholderText.style.display = 'none';
-            downloadBtn.style.display = 'block';
-        };
-
-        downloadBtn.addEventListener('click', function() {
-            const link = document.createElement('a');
-            link.download = 'photo-studio-pro-output.png';
-            link.href = imageCanvas.toDataURL('image/png');
-            link.click();
+        // Bangla / English Language Toggle
+        langToggle.addEventListener('click', () => {
+            currentLang = currentLang === 'bn' ? 'en' : 'bn';
+            langToggle.textContent = currentLang === 'bn' ? 'English' : 'বাংলা';
+            
+            document.querySelectorAll('[data-bn]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
         });
     </script>
-
 </body>
 </html>

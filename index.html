@@ -1,466 +1,437 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Photo Studio Pro</title>
 <style>
-:root{--bg:#f3f5fa;--panel:#fff;--ink:#172033;--muted:#758096;--primary:#4f46e5;--line:#e5e9f2}
+:root{--bg:#f3f6fb;--panel:#fff;--ink:#172033;--muted:#64748b;--line:#dce4ef;--brand:#2457d6;--brand2:#173fa8;--soft:#edf3ff;--good:#087f5b;--danger:#b42318}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Sans Bengali",sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer;border:0}
-.app{max-width:1500px;margin:auto;padding:16px}
-header{background:#171d36;color:white;padding:17px 20px;border-radius:15px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.brand{font-size:22px;font-weight:800}.brand small{display:block;font-size:11px;color:#b8c0e5;margin-top:4px;font-weight:400}
-.header-actions{display:flex;gap:8px}.header-actions button{background:#303959;color:white;padding:9px 12px;border-radius:8px}
-.layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:15px;margin-top:16px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0}
-h3{font-size:15px;margin:0 0 13px}.section{margin-bottom:19px}
-label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
-input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink);min-width:0}
-input[type=color]{height:40px;padding:4px}input[type=range]{padding:0}
-.btn{padding:10px 12px;border-radius:8px;background:#edf0ff;color:#3730a3;font-size:13px;font-weight:600}
-.btn.primary{background:var(--primary);color:white}.btn.green{background:#059669;color:white}.btn.dark{background:#222b45;color:white}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.buttons,.tools{display:flex;gap:7px;flex-wrap:wrap}.buttons .btn,.tools button{flex:1}
-.upload{border:2px dashed #aab2d0;background:#f8f9ff;padding:22px 10px;text-align:center;border-radius:12px;cursor:pointer;color:#4f46e5;font-size:13px}
-.upload strong{display:block;font-size:25px;margin-bottom:7px}
-.workspace{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:15px}
-.preview{background:#e9edf5;border-radius:12px;min-height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:14px;position:relative}
-#photoCanvas{max-width:100%;max-height:490px;object-fit:contain;background:white;box-shadow:0 3px 16px #0002}
-.empty{text-align:center;color:#8a93a8;font-size:14px}.empty strong{display:block;font-size:42px;margin-bottom:8px}
-.status{font-size:12px;color:var(--muted);margin-top:10px;min-height:18px}
-.tools{margin-top:12px}.tools button{min-width:85px}
-.color-list{display:flex;gap:7px;flex-wrap:wrap}.color-dot{width:29px;height:29px;border-radius:50%;border:2px solid #ddd}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.stat{padding:12px;background:#f6f7fc;border-radius:10px}.stat strong{font-size:18px;display:block}.stat span{font-size:11px;color:var(--muted)}
-.sheet-wrap{background:#e9edf5;border-radius:12px;padding:15px;overflow:auto;text-align:center}
-#sheetCanvas{display:block;max-width:100%;height:auto;margin:auto;background:white;box-shadow:0 3px 15px #0002}
-.note{font-size:11px;color:var(--muted);line-height:1.6}
-hr{border:0;border-top:1px solid var(--line);margin:15px 0}
-.hidden{display:none!important}.tabs{display:flex;gap:8px;margin:14px 0}
-.tab{padding:9px 15px;border-radius:8px;background:white;color:#555;font-size:13px}
-.tab.active{background:var(--primary);color:white}
-#message{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#18213a;color:white;padding:11px 18px;border-radius:9px;font-size:13px;z-index:99;display:none;max-width:90%;text-align:center}
-footer{text-align:center;padding:20px;color:#8991a3;font-size:11px}
-body.dark{--bg:#111827;--panel:#1f2937;--ink:#f3f4f6;--muted:#aab3c4;--line:#374151}
-body.dark input,body.dark select{background:#273449;color:white;border-color:#475569}
-body.dark .stat,body.dark .tab{background:#273449;color:white}
-@media(max-width:900px){.layout,.workspace{grid-template-columns:1fr}.preview{min-height:270px}}
-@media(max-width:480px){.app{padding:8px}header{padding:13px}.brand{font-size:19px}.panel{padding:12px}.stats{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:15px}}
-@media print{body{background:white}.app>header,.sidebar,.editor,.tabs,footer,.print-hide{display:none!important}.app{padding:0;margin:0;max-width:none}.layout,.workspace{display:block;margin:0}.panel{border:0;padding:0}.sheet-wrap{background:white;padding:0;overflow:visible}#sheetCanvas{max-width:none!important;width:auto!important;height:auto!important;box-shadow:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:#14264d;color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h1{font-size:22px;margin:0}
+header p{margin:3px 0 0;color:#cbd5e1;font-size:13px}
+main{max-width:1400px;margin:auto;padding:18px;display:grid;grid-template-columns:minmax(280px,370px) minmax(0,1fr);gap:18px}
+.panel,.workspace{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px #18294b0b}
+.panel{padding:16px;align-self:start}
+.workspace{padding:16px;min-width:0}
+h2{font-size:16px;margin:0 0 12px}
+.field{margin:11px 0}
+.field label{display:block;font-weight:650;font-size:13px;margin-bottom:5px}
+input,select,button{font:inherit}
+input[type=file],input[type=number],input[type=text],select{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px;background:#fff;color:var(--ink)}
+input[type=color]{width:48px;height:38px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff}
+input[type=range]{width:100%;accent-color:var(--brand)}
+button{border:0;border-radius:9px;padding:10px 12px;background:var(--brand);color:#fff;font-weight:650;cursor:pointer}
+button:hover{background:var(--brand2)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.secondary{background:#e9eef8;color:#1c2a44}
+.secondary:hover{background:#dbe5f5}
+.green{background:#087f5b}
+.green:hover{background:#06684b}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btnrow button{flex:1}
+.note{font-size:12px;color:var(--muted);margin:6px 0}
+.status{font-size:12px;padding:8px 10px;background:#f1f5f9;border-radius:8px;color:#334155;margin-top:9px;min-height:34px}
+.colorrow{display:flex;align-items:center;gap:9px}
+.swatches{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.swatch{width:26px;height:26px;border:2px solid #cbd5e1;border-radius:50%;cursor:pointer}
+.swatch.active{outline:2px solid var(--brand);outline-offset:2px}
+.previewArea{min-height:380px;background:repeating-conic-gradient(#e8edf4 0% 25%,#f7f9fc 0% 50%) 50%/22px 22px;border:1px dashed #c7d2e2;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:auto;padding:18px}
+#photoCanvas{max-width:100%;max-height:560px;object-fit:contain;box-shadow:0 3px 18px #0002;background:transparent}
+.empty{color:var(--muted);text-align:center;padding:30px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.smallgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.divider{height:1px;background:var(--line);margin:15px 0}
+.printPreview{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:12px;background:#f8fafc}
+#printSheet{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:10px}
+.sheet{background:#fff;display:grid;justify-content:start;align-content:start;overflow:hidden;box-shadow:0 2px 12px #0001}
+#printSheet img{display:block;object-fit:cover}
+.footer{max-width:1400px;margin:0 auto;padding:0 18px 22px;color:var(--muted);font-size:12px}
+@media(max-width:850px){main{grid-template-columns:1fr;padding:10px}.previewArea{min-height:260px}}
+@media print{
+body{background:#fff}
+header,.panel,.workspace>.toolbar,.workspace>.h2,.workspace>.previewArea,.workspace>.printControls,.footer{display:none!important}
+main{display:block;padding:0;margin:0}
+.workspace{border:0;box-shadow:none;padding:0}
+.printPreview{border:0;padding:0;margin:0;background:#fff}
+#printSheet{display:block;margin:0}
+.sheet{margin:0;box-shadow:none;break-after:page;page-break-after:always}
+.sheet:last-child{break-after:auto;page-break-after:auto}
+}
 </style>
 </head>
 <body>
-<div class="app">
 <header>
- <div class="brand">📸 PHOTO STUDIO PRO<small>Professional Photo Editing & Printing Studio</small></div>
- <div class="header-actions">
-  <button onclick="toggleTheme()">◐ Theme</button>
-  <button onclick="resetAll()">Reset</button>
- </div>
+<div>
+<h1>Photo Studio Pro</h1>
+<p>Passport • Stamp • Photo Editing • Print Layout</p>
+</div>
+<div style="font-size:12px;color:#dbeafe">Single-file browser studio</div>
 </header>
 
-<div class="layout">
-<aside class="panel sidebar">
- <div class="section">
-  <h3>📤 Upload Photo</h3>
-  <label class="upload" for="fileInput"><strong>＋</strong>ছবি নির্বাচন করুন<small>JPG, JPEG, PNG</small></label>
-  <input id="fileInput" type="file" accept="image/jpeg,image/png" class="hidden">
-  <div class="status" id="fileStatus">কোনো ছবি নির্বাচন করা হয়নি</div>
- </div>
- <hr>
- <div class="section">
-  <h3>✨ HD Photo Enhancement</h3>
-  <button class="btn green" style="width:100%" id="hdBtn">✨ HD CLEAR – ছবি পরিষ্কার করুন</button>
-  <label>Brightness: <span id="brightnessValue">100%</span></label>
-  <input type="range" id="brightness" min="50" max="160" value="100">
-  <label>Contrast: <span id="contrastValue">100%</span></label>
-  <input type="range" id="contrast" min="50" max="180" value="100">
-  <label>Sharpness: <span id="sharpnessValue">0%</span></label>
-  <input type="range" id="sharpness" min="0" max="100" value="0">
-  <button class="btn" style="width:100%;margin-top:9px" id="applyAdjust">Apply Adjustments</button>
-  <button class="btn" style="width:100%;margin-top:7px" id="resetAdjust">Reset Adjustments</button>
- </div>
- <hr>
- <div class="section">
-  <h3>🎨 Background</h3>
-  <div class="color-list">
-   <button class="color-dot" style="background:white" data-bg="#ffffff" title="White"></button>
-   <button class="color-dot" style="background:#1875d1" data-bg="#1875d1" title="Blue"></button>
-   <button class="color-dot" style="background:red" data-bg="#ff0000" title="Red"></button>
-   <button class="color-dot" style="background:#888" data-bg="#888888" title="Gray"></button>
-  </div>
-  <label>Custom Background</label><input type="color" id="bgColor" value="#ffffff">
-  <button class="btn" id="applyBg" style="width:100%;margin-top:8px">Apply Background</button>
-  <label>Background Remove (Simple Color Key)</label>
-  <button class="btn" id="pickBg" style="width:100%">ছবির ব্যাকগ্রাউন্ডের রং নির্বাচন করুন</button>
-  <label>Color Tolerance: <span id="toleranceValue">45</span></label>
-  <input type="range" id="tolerance" min="10" max="150" value="45">
-  <button class="btn" id="removeBg" style="width:100%;margin-top:8px">Remove Selected Color</button>
-  <p class="note">এটি কাছাকাছি রঙের পিক্সেল সরায়। জটিল ব্যাকগ্রাউন্ডের জন্য AI Background Removal প্রয়োজন।</p>
- </div>
- <hr>
- <div class="section">
-  <h3>📐 Photo Size</h3>
-  <label>Photo Type</label>
-  <select id="photoSize">
-   <option value="35,45">Passport (35 × 45 mm)</option>
-   <option value="25,30">Stamp (25 × 30 mm)</option>
-   <option value="102,152">4R (102 × 152 mm)</option>
-   <option value="127,178">5R (127 × 178 mm)</option>
-   <option value="152,203">6R (152 × 203 mm)</option>
-   <option value="203,254">8R (203 × 254 mm)</option>
-   <option value="210,297">A4 (210 × 297 mm)</option>
-   <option value="216,356">Legal (216 × 356 mm)</option>
-   <option value="custom">Custom Size</option>
-  </select>
-  <div id="customSize" class="hidden">
-   <label>Width (mm)</label><input type="number" id="customW" value="35" min="1">
-   <label>Height (mm)</label><input type="number" id="customH" value="45" min="1">
-  </div>
-  <label>Resolution (DPI)</label>
-  <select id="dpi"><option value="300">300 DPI – Print Quality</option><option value="240">240 DPI</option><option value="150">150 DPI</option></select>
-  <label>Crop Position</label>
-  <select id="cropMode"><option value="cover">Fill Photo Size (Crop)</option><option value="contain">Fit Entire Photo</option></select>
-  <button class="btn primary" id="makePhoto" style="width:100%;margin-top:10px">Create Photo</button>
- </div>
+<main>
+<aside class="panel">
+<h2>১. ছবি আপলোড</h2>
+<div class="field">
+<label for="upload">কম্পিউটার থেকে ছবি নির্বাচন করুন</label>
+<input id="upload" type="file" accept="image/*">
+</div>
+<div class="btnrow">
+<button class="secondary" id="resetBtn">রিসেট</button>
+<button class="secondary" id="downloadBtn" disabled>ছবি ডাউনলোড</button>
+</div>
+<div class="status" id="status">প্রথমে একটি ছবি আপলোড করুন।</div>
+
+<div class="divider"></div>
+<h2>২. Background Remove</h2>
+<div class="field">
+<label>ব্যাকগ্রাউন্ডের রং আগে নির্বাচন করুন</label>
+<div class="colorrow">
+<input id="bgColor" type="color" value="#ffffff">
+<span id="bgHex">#FFFFFF</span>
+</div>
+<div class="swatches">
+<span class="swatch active" data-color="#ffffff" style="background:#fff"></span>
+<span class="swatch" data-color="#d9efff" style="background:#d9efff"></span>
+<span class="swatch" data-color="#1687e8" style="background:#1687e8"></span>
+<span class="swatch" data-color="#00a65a" style="background:#00a65a"></span>
+<span class="swatch" data-color="#ef4444" style="background:#ef4444"></span>
+<span class="swatch" data-color="#000000" style="background:#000"></span>
+</div>
+</div>
+<button id="removeBgBtn" class="green" style="width:100%" disabled>এক ক্লিকে AI Background Remove</button>
+<p class="note">প্রথমবার মডেল ডাউনলোড হতে সময় ও ইন্টারনেট লাগতে পারে। প্রসেসিং ব্রাউজারেই হবে।</p>
+
+<div class="divider"></div>
+<h2>৩. Face & Photo Editing</h2>
+<div class="btnrow">
+<button id="shadowBtn" class="secondary" disabled>Face Shadow কমান</button>
+<button id="clearBtn" class="secondary" disabled>Face Clear / Sharp</button>
+</div>
+<div class="field">
+<label for="brightness">Brightness: <span id="brightVal">100%</span></label>
+<input id="brightness" type="range" min="70" max="150" value="100" disabled>
+</div>
+<div class="field">
+<label for="contrast">Contrast: <span id="contrastVal">100%</span></label>
+<input id="contrast" type="range" min="70" max="140" value="100" disabled>
+</div>
+<div class="field">
+<label for="sharpness">Sharpness: <span id="sharpVal">0</span></label>
+<input id="sharpness" type="range" min="0" max="4" value="0" disabled>
+</div>
+<p class="note">Brightness, shadow balancing ও sharpening সাধারণ ছবির প্রসেসিং। এগুলো AI face reconstruction নয়।</p>
+
+<div class="divider"></div>
+<h2>৪. Print Size & Layout</h2>
+<div class="field">
+<label for="sizePreset">ছবির সাইজ</label>
+<select id="sizePreset">
+<option value="passport">Passport — 1.5″ × 1.9″</option>
+<option value="stamp">Stamp — 1″ × 1.2″</option>
+<option value="4r">4R — 4″ × 6″</option>
+<option value="5r">5R — 5″ × 7″</option>
+<option value="6r">6R — 6″ × 8″</option>
+<option value="8r">8R — 8″ × 10″</option>
+<option value="a4">A4 — 8.27″ × 11.69″ (sheet)</option>
+<option value="custom">Custom</option>
+</select>
+</div>
+<div class="smallgrid">
+<div class="field"><label for="photoW">Width (inch)</label><input id="photoW" type="number" min=".2" step=".01" value="1.5"></div>
+<div class="field"><label for="photoH">Height (inch)</label><input id="photoH" type="number" min=".2" step=".01" value="1.9"></div>
+<div class="field"><label for="copies">কপি সংখ্যা</label><input id="copies" type="number" min="1" max="200" value="8"></div>
+<div class="field"><label for="columns">প্রতি লাইনে</label><input id="columns" type="number" min="1" max="12" value="4"></div>
+<div class="field"><label for="margin">পেজ মার্জিন (inch)</label><input id="margin" type="number" min="0" max="1" step=".05" value=".2"></div>
+<div class="field"><label for="gap">ছবির দূরত্ব (inch)</label><input id="gap" type="number" min="0" max=".5" step=".01" value=".08"></div>
+</div>
+<div class="field">
+<label for="paper">কাগজ</label>
+<select id="paper">
+<option value="a4">A4 (8.27 × 11.69″)</option>
+<option value="4r">4R (4 × 6″)</option>
+<option value="custom">Custom Sheet (8.5 × 11″)</option>
+</select>
+</div>
+<div class="btnrow">
+<button id="previewBtn" disabled>Print Preview তৈরি</button>
+<button id="printBtn" class="green" disabled>প্রিন্ট করুন</button>
+</div>
 </aside>
 
-<main>
- <div class="workspace">
-  <section class="panel editor">
-   <h3>🖼️ Photo Editor</h3>
-   <div class="preview" id="preview">
-    <div class="empty" id="empty"><strong>📷</strong>প্রথমে আপনার ছবি Upload করুন</div>
-    <canvas id="photoCanvas" class="hidden"></canvas>
-   </div>
-   <div class="tools">
-    <button class="btn" id="rotate">↻ Rotate</button>
-    <button class="btn" id="flip">↔ Flip</button>
-    <button class="btn" id="undo">↶ Undo</button>
-    <button class="btn" id="downloadPhoto">↓ JPG</button>
-    <button class="btn" id="downloadPNG">↓ PNG</button>
-    <button class="btn" id="copyPhoto">▣ Copy</button>
-   </div>
-   <div class="status" id="editStatus">আপনার ছবি এখানে Preview হবে</div>
-  </section>
-  <section class="panel">
-   <h3>📋 Photo Information</h3>
-   <div class="stats">
-    <div class="stat"><strong id="originalW">0</strong><span>Width px</span></div>
-    <div class="stat"><strong id="originalH">0</strong><span>Height px</span></div>
-    <div class="stat"><strong id="photoDpi">300</strong><span>DPI</span></div>
-   </div>
-   <hr>
-   <h3>🖨️ Export Settings</h3>
-   <label>File Quality: <span id="qualityValue">95%</span></label>
-   <input type="range" id="quality" min="50" max="100" value="95">
-   <label>Output Format</label>
-   <select id="format"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select>
-   <hr>
-   <h3>⚡ Quick Actions</h3>
-   <button class="btn primary" id="quickPrint" style="width:100%">🖨️ Print Photo</button>
-   <button class="btn" id="goLayout" style="width:100%;margin-top:8px">📄 Create Page Layout</button>
-   <p class="note">পরিবর্তনের পর Preview পরীক্ষা করে Print করুন।</p>
-  </section>
- </div>
-
- <div class="tabs print-hide">
-  <button class="tab active" data-tab="layoutTab">📄 Print Layout</button>
-  <button class="tab" data-tab="settingsTab">⚙️ Layout Settings</button>
- </div>
- <section class="panel" id="layoutTab">
-  <h3>📄 Photo Printing Layout</h3>
-  <div class="sheet-wrap">
-   <canvas id="sheetCanvas" class="hidden"></canvas>
-   <div id="sheetEmpty" class="empty" style="padding:35px"><strong>📃</strong>প্রথমে ছবি তৈরি করুন</div>
-  </div>
-  <div class="tools print-hide">
-   <button class="btn primary" id="printPage">🖨️ Print Page</button>
-   <button class="btn" id="downloadSheet">↓ Save JPG</button>
-   <button class="btn" id="copySheet">▣ Copy Page</button>
-  </div>
-  <div class="status" id="layoutStatus"></div>
- </section>
- <section class="panel hidden" id="settingsTab">
-  <h3>⚙️ Page Layout Settings</h3>
-  <label>Paper Size</label>
-  <select id="paperSize">
-   <option value="210,297">A4 (210 × 297 mm)</option><option value="216,356">Legal (216 × 356 mm)</option>
-   <option value="102,152">4R (102 × 152 mm)</option><option value="127,178">5R (127 × 178 mm)</option>
-   <option value="152,203">6R (152 × 203 mm)</option><option value="203,254">8R (203 × 254 mm)</option>
-   <option value="custom">Custom Paper</option>
-  </select>
-  <div id="customPaper" class="hidden">
-   <label>Paper Width (mm)</label><input id="paperW" type="number" value="210" min="1">
-   <label>Paper Height (mm)</label><input id="paperH" type="number" value="297" min="1">
-  </div>
-  <label>Number of Photos / Copies</label><input type="number" id="copies" value="4" min="1" max="500">
-  <label>Photos Per Row (Columns)</label><input type="number" id="columns" value="4" min="1" max="30">
-  <label>Gap Between Photos (mm)</label><input type="number" id="gap" value="2" min="0" max="30" step=".5">
-  <label>Page Margin (mm)</label><input type="number" id="margin" value="5" min="0" max="40" step=".5">
-  <label>Horizontal Position</label>
-  <select id="alignment"><option value="left">Top Left</option><option value="center">Top Center</option></select>
-  <button class="btn primary" id="generateLayout" style="width:100%;margin-top:14px">Generate Print Layout</button>
-  <p class="note">৪টি কপি দিলে ৪টি কলাম এবং ৫টি কপি দিলে ৫টি কলাম স্বয়ংক্রিয়ভাবে নির্বাচন হবে। পৃষ্ঠায় জায়গা না হলে পরের সারিতে যাবে।</p>
- </section>
+<section class="workspace">
+<div class="toolbar">
+<div>
+<h2 style="margin:0">Photo Editor Preview</h2>
+<div class="note">মূল ছবি ও এডিট করা ফলাফল এখানে দেখাবে</div>
+</div>
+<span class="note" id="dimensions">No image</span>
+</div>
+<div class="previewArea" id="previewArea">
+<div class="empty">ছবি আপলোড করলে এখানে দেখা যাবে</div>
+<canvas id="photoCanvas" hidden></canvas>
+</div>
+<div class="printPreview">
+<div class="toolbar">
+<h2 style="margin:0">Print Sheet Preview</h2>
+<span class="note" id="sheetInfo">এখনো তৈরি হয়নি</span>
+</div>
+<div id="printSheet"><div class="empty">Print Preview তৈরি করুন</div></div>
+</div>
+<div class="printControls note">প্রিন্ট ডায়ালগে Paper size, Orientation এবং Scale যাচাই করুন। Scale: 100% / Actual size নির্বাচন করুন; Fit to page বন্ধ রাখুন।</div>
+</section>
 </main>
-</div>
-<footer>PHOTO STUDIO PRO • Browser-based Photo Editing & Printing</footer>
-</div>
-<div id="message"></div>
 
-<script>
-"use strict";
+<div class="footer">নোট: সঠিক রঙ ও মাপের জন্য প্রিন্টারের Borderless / paper settings অনুযায়ী ফল ভিন্ন হতে পারে। পাসপোর্ট সাইজের ডিফল্ট মাপ 1.5″ × 1.9″।</div>
+
+<script type="module">
+import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.6/+esm";
+
 const $=id=>document.getElementById(id);
-const photo=$("photoCanvas"),ctx=photo.getContext("2d",{willReadFrequently:true});
-const sheet=$("sheetCanvas"),sctx=sheet.getContext("2d");
-let sourceImage=null,photoResult=null,history=[],bgRemoved=false,picking=false;
-let rotation=0,flipped=false,generated=false;
-const mmPx=(mm,dpi)=>Math.max(1,Math.round(mm*dpi/25.4));
-let timer;
-function say(t){const m=$("message");m.textContent=t;m.style.display="block";clearTimeout(timer);timer=setTimeout(()=>m.style.display="none",2600)}
-function requirePhoto(){if(!sourceImage){say("আগে একটি ছবি Upload করুন");return false}return true}
-function clearSheet(){sheet.width=0;sheet.height=0;sheet.classList.add("hidden");$("sheetEmpty").classList.remove("hidden");$("layoutStatus").textContent=""}
-function invalidate(){generated=false;photoResult=null;clearSheet()}
-function remember(){if(!photo.width)return;history.push(ctx.getImageData(0,0,photo.width,photo.height));if(history.length>8)history.shift()}
-function showPhoto(){photo.classList.remove("hidden");$("empty").classList.add("hidden")}
-function loadImage(file){
- if(!file)return;
- if(!["image/jpeg","image/png"].includes(file.type)){say("শুধু JPG অথবা PNG ছবি নির্বাচন করুন");return}
- if(file.size>25*1024*1024){say("সর্বোচ্চ ২৫ MB ছবি Upload করুন");return}
- const url=URL.createObjectURL(file),img=new Image();
- img.onload=()=>{
-  sourceImage=img;rotation=0;flipped=false;history=[];bgRemoved=false;
-  const scale=Math.min(1,2400/Math.max(img.width,img.height));
-  photo.width=Math.round(img.width*scale);photo.height=Math.round(img.height*scale);
-  ctx.clearRect(0,0,photo.width,photo.height);ctx.drawImage(img,0,0,photo.width,photo.height);
-  showPhoto();$("originalW").textContent=img.width;$("originalH").textContent=img.height;
-  $("fileStatus").textContent=file.name;$("editStatus").textContent="ছবি Upload সফল হয়েছে";
-  $("brightness").value=100;$("contrast").value=100;$("sharpness").value=0;
-  updateLabels();$("bgColor").value="#ffffff";invalidate();URL.revokeObjectURL(url);say("ছবি সফলভাবে Upload হয়েছে");
- };
- img.onerror=()=>{URL.revokeObjectURL(url);say("ছবি খোলা যায়নি")};img.src=url;
+const canvas=$("photoCanvas"),ctx=canvas.getContext("2d",{willReadFrequently:true});
+let original=null,baseImage=null,processing=false;
+
+const presets={
+passport:[1.5,1.9],
+stamp:[1,1.2],
+"4r":[4,6],
+"5r":[5,7],
+"6r":[6,8],
+"8r":[8,10],
+a4:[8.27,11.69]
+};
+
+function say(t){$("status").textContent=t}
+
+function setButtons(on){
+["removeBgBtn","shadowBtn","clearBtn","brightness","contrast","sharpness","downloadBtn","previewBtn"].forEach(id=>$(id).disabled=!on);
+$("printBtn").disabled=!on;
 }
-$("fileInput").addEventListener("change",e=>loadImage(e.target.files[0]));
+
+function drawImage(img){
+canvas.width=img.naturalWidth||img.width;
+canvas.height=img.naturalHeight||img.height;
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.drawImage(img,0,0);
+$("dimensions").textContent=canvas.width+" × "+canvas.height+" px";
+canvas.hidden=false;
+$("previewArea").querySelector(".empty")?.remove();
+baseImage=ctx.getImageData(0,0,canvas.width,canvas.height);
+setButtons(true);
+$("brightness").value=100;
+$("contrast").value=100;
+$("sharpness").value=0;
+updateLabels();
+}
 
 function updateLabels(){
- ["brightness","contrast","sharpness","quality","tolerance"].forEach(id=>{
-  const out=$(id+"Value");if(out)out.textContent=$(id).value+(["brightness","contrast","sharpness","quality"].includes(id)?"%":"");
- });
+$("brightVal").textContent=$("brightness").value+"%";
+$("contrastVal").textContent=$("contrast").value+"%";
+$("sharpVal").textContent=$("sharpness").value;
 }
-["brightness","contrast","sharpness","quality","tolerance"].forEach(id=>$(id).addEventListener("input",updateLabels));
+
+function imageFromBlob(blob){
+return new Promise((resolve,reject)=>{
+const u=URL.createObjectURL(blob),im=new Image();
+im.onload=()=>{URL.revokeObjectURL(u);resolve(im)};
+im.onerror=reject;
+im.src=u;
+});
+}
 
 function applyAdjustments(){
- if(!requirePhoto())return;
- remember();
- const temp=document.createElement("canvas");temp.width=photo.width;temp.height=photo.height;
- const t=temp.getContext("2d");
- t.filter=`brightness(${$("brightness").value}%) contrast(${$("contrast").value}%)`;
- t.drawImage(photo,0,0);
- ctx.clearRect(0,0,photo.width,photo.height);ctx.drawImage(temp,0,0);
- const amount=Number($("sharpness").value)/100;
- if(amount>0)sharpen(amount);
- invalidate();$("editStatus").textContent="Image adjustments applied";say("ছবির পরিবর্তন প্রয়োগ হয়েছে");
+if(!baseImage)return;
+const w=baseImage.width,h=baseImage.height;
+ctx.putImageData(baseImage,0,0);
+let d=ctx.getImageData(0,0,w,h),a=d.data;
+let b=Number($("brightness").value)/100;
+let c=Number($("contrast").value)/100;
+let sh=Number($("sharpness").value);
+for(let i=0;i<a.length;i+=4){
+for(let k=0;k<3;k++){
+let v=(a[i+k]-128)*c+128;
+a[i+k]=Math.max(0,Math.min(255,v*b));
 }
-function sharpen(amount){
- const w=photo.width,h=photo.height;
- if(w<3||h<3)return;
- const im=ctx.getImageData(0,0,w,h),d=im.data,copy=new Uint8ClampedArray(d);
- for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
-  const i=(y*w+x)*4;
-  for(let c=0;c<3;c++){
-   const blur=(copy[i-4+c]+copy[i+4+c]+copy[i-w*4+c]+copy[i+w*4+c])/4;
-   d[i+c]=Math.max(0,Math.min(255,copy[i+c]+(copy[i+c]-blur)*amount));
-  }
- }
- ctx.putImageData(im,0,0);
 }
-$("applyAdjust").onclick=applyAdjustments;
-$("hdBtn").onclick=()=>{
- if(!requirePhoto())return;
- $("brightness").value=105;$("contrast").value=112;$("sharpness").value=55;updateLabels();applyAdjustments();
-};
-$("resetAdjust").onclick=()=>{
- if(!requirePhoto())return;
- $("brightness").value=100;$("contrast").value=100;$("sharpness").value=0;updateLabels();
- say("পরবর্তী Apply-এর জন্য সেটিংস Reset হয়েছে");
-};
-
-function rgb(hex){return [1,3,5].map(i=>parseInt(hex.slice(i,i+2),16))}
-function compositeBackground(){
- if(!requirePhoto())return;
- if(!bgRemoved){say("আগে Remove Selected Color ব্যবহার করুন");return}
- remember();
- const color=rgb($("bgColor").value),im=ctx.getImageData(0,0,photo.width,photo.height),d=im.data;
- for(let i=0;i<d.length;i+=4){
-  const a=d[i+3]/255;
-  if(a<1){
-   d[i]=Math.round(d[i]*a+color[0]*(1-a));
-   d[i+1]=Math.round(d[i+1]*a+color[1]*(1-a));
-   d[i+2]=Math.round(d[i+2]*a+color[2]*(1-a));d[i+3]=255;
-  }
- }
- ctx.putImageData(im,0,0);bgRemoved=false;invalidate();say("Background পরিবর্তন হয়েছে");
+ctx.putImageData(d,0,0);
+if(sh>0){
+const src=ctx.getImageData(0,0,w,h),out=ctx.createImageData(w,h);
+const s=src.data,o=out.data,amt=sh*.18;
+for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
+let p=(y*w+x)*4;
+for(let k=0;k<3;k++){
+let center=s[p+k];
+let avg=(s[p-4+k]+s[p+4+k]+s[p-w*4+k]+s[p+w*4+k])/4;
+o[p+k]=Math.max(0,Math.min(255,center+(center-avg)*amt));
 }
-document.querySelectorAll("[data-bg]").forEach(b=>b.onclick=()=>{$("bgColor").value=b.dataset.bg;compositeBackground()});
-$("applyBg").onclick=compositeBackground;
-
-$("pickBg").onclick=()=>{
- if(!requirePhoto())return;
- picking=true;$("pickBg").textContent="এখন ছবির ব্যাকগ্রাউন্ডে ক্লিক করুন";say("ছবির Background-এর রঙের ওপর ক্লিক করুন");
-};
-photo.addEventListener("click",e=>{
- if(!picking)return;
- const r=photo.getBoundingClientRect();
- const x=Math.max(0,Math.min(photo.width-1,Math.floor((e.clientX-r.left)*photo.width/r.width)));
- const y=Math.max(0,Math.min(photo.height-1,Math.floor((e.clientY-r.top)*photo.height/r.height)));
- const p=ctx.getImageData(x,y,1,1).data;
- $("bgColor").value="#"+[p[0],p[1],p[2]].map(v=>v.toString(16).padStart(2,"0")).join("");
- picking=false;$("pickBg").textContent="ছবির ব্যাকগ্রাউন্ডের রং নির্বাচন করুন";say("রং নির্বাচন হয়েছে। Remove Selected Color চাপুন");
-});
-$("removeBg").onclick=()=>{
- if(!requirePhoto())return;
- remember();
- const target=rgb($("bgColor").value),tol=Number($("tolerance").value);
- const im=ctx.getImageData(0,0,photo.width,photo.height),d=im.data;
- for(let i=0;i<d.length;i+=4){
-  const dist=Math.hypot(d[i]-target[0],d[i+1]-target[1],d[i+2]-target[2]);
-  if(dist<tol)d[i+3]=0;
-  else if(dist<tol+20)d[i+3]=Math.round(d[i+3]*(dist-tol)/20);
- }
- ctx.putImageData(im,0,0);bgRemoved=true;invalidate();say("নির্বাচিত রং সরানো হয়েছে");
-};
-
-$("rotate").onclick=()=>{
- if(!requirePhoto())return;remember();
- const old=document.createElement("canvas");old.width=photo.width;old.height=photo.height;old.getContext("2d").drawImage(photo,0,0);
- photo.width=old.height;photo.height=old.width;ctx.save();ctx.translate(photo.width/2,photo.height/2);ctx.rotate(Math.PI/2);ctx.drawImage(old,-old.width/2,-old.height/2);ctx.restore();invalidate();
-};
-$("flip").onclick=()=>{
- if(!requirePhoto())return;remember();
- const im=ctx.getImageData(0,0,photo.width,photo.height);ctx.save();ctx.clearRect(0,0,photo.width,photo.height);ctx.translate(photo.width,0);ctx.scale(-1,1);ctx.putImageData(im,0,0);ctx.restore();invalidate();
-};
-$("undo").onclick=()=>{
- if(!history.length){say("Undo করার মতো কাজ নেই");return}
- const im=history.pop();photo.width=im.width;photo.height=im.height;ctx.putImageData(im,0,0);invalidate();say("Undo সম্পন্ন");
-};
-
-function getPhotoSize(){
- if($("photoSize").value==="custom")return [Number($("customW").value),Number($("customH").value)];
- return $("photoSize").value.split(",").map(Number);
+o[p+3]=s[p+3];
 }
-$("photoSize").onchange=()=>{$("customSize").classList.toggle("hidden",$("photoSize").value!=="custom")};
-$("paperSize").onchange=()=>{$("customPaper").classList.toggle("hidden",$("paperSize").value!=="custom")};
-
-function createOutput(){
- if(!requirePhoto())return null;
- const [wmm,hmm]=getPhotoSize(),dpi=Number($("dpi").value);
- if(!(wmm>0&&hmm>0)){say("সঠিক Photo Size দিন");return null}
- const w=mmPx(wmm,dpi),h=mmPx(hmm,dpi);
- const out=document.createElement("canvas");out.width=w;out.height=h;
- const o=out.getContext("2d");
- o.fillStyle=$("bgColor").value;o.fillRect(0,0,w,h);
- const ratio= $("cropMode").value==="cover"?Math.max(w/photo.width,h/photo.height):Math.min(w/photo.width,h/photo.height);
- const dw=photo.width*ratio,dh=photo.height*ratio;
- o.drawImage(photo,(w-dw)/2,(h-dh)/2,dw,dh);
- return out;
+ctx.putImageData(out,0,0);
 }
-$("makePhoto").onclick=()=>{
- const out=createOutput();if(!out)return;
- photoResult=out;generated=true;$("photoDpi").textContent=$("dpi").value;
- $("editStatus").textContent=`তৈরি হয়েছে: ${getPhotoSize().join(" × ")} mm`;
- say("Photo তৈরি হয়েছে");
-};
-
-function getPaper(){
- if($("paperSize").value==="custom")return [Number($("paperW").value),Number($("paperH").value)];
- return $("paperSize").value.split(",").map(Number);
-}
-function generateLayout(){
- if(!photoResult){const out=createOutput();if(!out)return;photoResult=out}
- const [pw,ph]=getPaper(),dpi=Number($("dpi").value);
- const copies=Math.max(1,Math.min(500,Number($("copies").value)||1));
- const gap=Math.max(0,Number($("gap").value)||0),margin=Math.max(0,Number($("margin").value)||0);
- const cols=Math.max(1,Math.min(30,Number($("columns").value)||copies));
- if(pw<=0||ph<=0){say("সঠিক Paper Size দিন");return}
- const [wm,hm]=getPhotoSize(),w=mmPx(wm,dpi),h=mmPx(hm,dpi);
- const paperW=mmPx(pw,dpi),paperH=mmPx(ph,dpi),g=mmPx(gap,dpi),m=mmPx(margin,dpi);
- if(w+2*m>paperW||h+2*m>paperH){say("এই পেপারে ছবির জন্য জায়গা নেই");return}
- const actualCols=Math.min(cols,Math.floor((paperW-2*m+g)/(w+g)));
- const rows=Math.ceil(copies/actualCols);
- if(m*2+rows*h+(rows-1)*g>paperH){say("সব ছবি এক পৃষ্ঠায় ধরছে না। Paper Size বা Columns পরিবর্তন করুন");return}
- sheet.width=paperW;sheet.height=paperH;sctx.fillStyle="#ffffff";sctx.fillRect(0,0,paperW,paperH);
- let startX=m;
- if($("alignment").value==="center")startX=Math.max(m,(paperW-(actualCols*w+(actualCols-1)*g))/2);
- for(let i=0;i<copies;i++){
-  const col=i%actualCols,row=Math.floor(i/actualCols);
-  sctx.drawImage(photoResult,startX+col*(w+g),m+row*(h+g),w,h);
- }
- sheet.classList.remove("hidden");$("sheetEmpty").classList.add("hidden");
- $("layoutStatus").textContent=`${copies} টি ছবি • ${actualCols} টি প্রতি সারিতে • ${pw} × ${ph} mm • ${dpi} DPI`;
- generated=true;say("Print Layout তৈরি হয়েছে");
-}
-$("generateLayout").onclick=generateLayout;
-$("copies").addEventListener("input",()=>{const n=Math.max(1,Number($("copies").value)||1);$("columns").value=n});
-$("goLayout").onclick=()=>{$("settingsTab").classList.remove("hidden");$("layoutTab").classList.add("hidden");document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab==="settingsTab"))};
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
- document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");
- $("layoutTab").classList.toggle("hidden",b.dataset.tab!=="layoutTab");
- $("settingsTab").classList.toggle("hidden",b.dataset.tab!=="settingsTab");
-});
-
-function downloadCanvas(canvas,type,name){
- if(!canvas||!canvas.width){say("আগে ছবি তৈরি করুন");return}
- const quality=Number($("quality").value)/100;
- canvas.toBlob(blob=>{
-  if(!blob){say("ফাইল তৈরি করা যায়নি");return}
-  const url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
- },type,quality);
-}
-$("downloadPhoto").onclick=()=>downloadCanvas(photoResult||photo,"image/jpeg","photo-studio.jpg");
-$("downloadPNG").onclick=()=>downloadCanvas(photoResult||photo,"image/png","photo-studio.png");
-$("downloadSheet").onclick=()=>downloadCanvas(sheet,"image/jpeg","photo-print-layout.jpg");
-
-async function copyCanvas(canvas){
- if(!canvas||!canvas.width){say("আগে ছবি তৈরি করুন");return}
- try{
-  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
-  await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);say("ছবি Clipboard-এ Copy হয়েছে");
- }catch(e){say("Copy করতে পারেনি। HTTPS ও Clipboard Permission পরীক্ষা করুন")}
-}
-$("copyPhoto").onclick=()=>copyCanvas(photoResult||photo);
-$("copySheet").onclick=()=>copyCanvas(sheet);
-
-function printCanvas(canvas){
- if(!canvas||!canvas.width){say("আগে ছবি তৈরি করুন");return}
- const data=canvas.toDataURL("image/png");
- const win=window.open("","_blank");
- if(!win){say("Print Window খুলতে পারেনি। Pop-up Allow করুন");return}
- win.document.write(`<html><head><title>Photo Print</title><style>@page{margin:0}body{margin:0}img{display:block;width:auto;height:auto;max-width:100%}</style></head><body><img src="${data}" onload="window.print()"></body></html>`);
- win.document.close();
-}
-$("quickPrint").onclick=()=>printCanvas(photoResult||photo);
-$("printPage").onclick=()=>printCanvas(sheet);
-
-function toggleTheme(){document.body.classList.toggle("dark")}
-function resetAll(){
- sourceImage=null;photoResult=null;history=[];bgRemoved=false;picking=false;
- photo.width=0;photo.height=0;photo.classList.add("hidden");$("empty").classList.remove("hidden");
- $("fileInput").value="";$("fileStatus").textContent="কোনো ছবি নির্বাচন করা হয়নি";
- $("editStatus").textContent="আপনার ছবি এখানে Preview হবে";
- $("originalW").textContent="0";$("originalH").textContent="0";$("photoDpi").textContent="300";
- $("brightness").value=100;$("contrast").value=100;$("sharpness").value=0;
- $("quality").value=95;$("bgColor").value="#ffffff";updateLabels();clearSheet();
- say("সব Reset হয়েছে");
-}
-$("quality").addEventListener("input",updateLabels);
-$("dpi").onchange=()=>{$("photoDpi").textContent=$("dpi").value};
 updateLabels();
+}
+
+$("upload").addEventListener("change",e=>{
+const f=e.target.files?.[0];
+if(!f)return;
+if(!f.type.startsWith("image/")){say("সঠিক ছবি নির্বাচন করুন।");return}
+const u=URL.createObjectURL(f),im=new Image();
+im.onload=()=>{
+original=im;
+drawImage(im);
+URL.revokeObjectURL(u);
+say("ছবি লোড হয়েছে। এখন এডিট করতে পারবেন।");
+};
+im.onerror=()=>say("ছবি খোলা যায়নি। অন্য ছবি দিন।");
+im.src=u;
+});
+
+$("bgColor").addEventListener("input",()=>{
+$("bgHex").textContent=$("bgColor").value.toUpperCase();
+document.querySelectorAll(".swatch").forEach(s=>s.classList.toggle("active",s.dataset.color===$("bgColor").value));
+});
+
+document.querySelectorAll(".swatch").forEach(s=>s.addEventListener("click",()=>{
+$("bgColor").value=s.dataset.color;
+$("bgColor").dispatchEvent(new Event("input"));
+}));
+
+$("removeBgBtn").addEventListener("click",async()=>{
+if(!original||processing)return;
+processing=true;
+$("removeBgBtn").disabled=true;
+say("AI মডেল লোড হচ্ছে; প্রথমবার সময় লাগতে পারে…");
+try{
+const blob=await new Promise(r=>canvas.toBlob(r,"image/png"));
+const result=await removeBackground(blob,{
+model:"medium",
+output:{format:"image/png",quality:1}
+});
+const im=await imageFromBlob(result);
+const tmp=document.createElement("canvas");
+tmp.width=im.width;
+tmp.height=im.height;
+const t=tmp.getContext("2d");
+t.fillStyle=$("bgColor").value;
+t.fillRect(0,0,tmp.width,tmp.height);
+t.drawImage(im,0,0);
+const merged=await imageFromBlob(await new Promise(r=>tmp.toBlob(r,"image/png")));
+drawImage(merged);
+say("Background remove হয়েছে এবং নির্বাচিত রং বসানো হয়েছে।");
+}catch(err){
+console.error(err);
+say("AI Background Remove ব্যর্থ হয়েছে। ইন্টারনেট/ব্রাউজার অনুমতি পরীক্ষা করে আবার চেষ্টা করুন।");
+}finally{
+processing=false;
+$("removeBgBtn").disabled=false;
+}
+});
+
+$("shadowBtn").addEventListener("click",()=>{
+if(!baseImage)return;
+$("brightness").value=Math.max(105,Number($("brightness").value));
+$("contrast").value=95;
+applyAdjustments();
+say("ছবির সামগ্রিক ছায়া কিছুটা কমানোর adjustment করা হয়েছে; এটি AI face-only shadow removal নয়।");
+});
+
+$("clearBtn").addEventListener("click",()=>{
+if(!baseImage)return;
+$("sharpness").value=3;
+$("contrast").value=108;
+applyAdjustments();
+say("ছবির sharpness ও contrast বাড়ানো হয়েছে।");
+});
+
+["brightness","contrast","sharpness"].forEach(id=>$(id).addEventListener("input",applyAdjustments));
+
+$("sizePreset").addEventListener("change",()=>{
+const p=presets[$("sizePreset").value];
+if(p){
+$("photoW").value=p[0];
+$("photoH").value=p[1];
+}
+});
+
+$("resetBtn").addEventListener("click",()=>{
+if(!original)return;
+drawImage(original);
+say("মূল ছবিতে ফিরে গেছে।");
+});
+
+$("downloadBtn").addEventListener("click",()=>{
+canvas.toBlob(b=>{
+const a=document.createElement("a"),u=URL.createObjectURL(b);
+a.href=u;
+a.download="photo-studio-edited.png";
+a.click();
+URL.revokeObjectURL(u);
+},"image/png");
+});
+
+function num(id,min,max){
+let v=Number($(id).value);
+return Number.isFinite(v)?Math.max(min,Math.min(max,v)):min;
+}
+
+$("previewBtn").addEventListener("click",()=>{
+if(!canvas.width)return;
+const pw=num("photoW",.2,12);
+const ph=num("photoH",.2,16);
+const copies=Math.round(num("copies",1,200));
+const cols=Math.round(num("columns",1,12));
+const margin=num("margin",0,1);
+const gap=num("gap",0,.5);
+const paper=$("paper").value;
+let sw=paper==="4r"?4:paper==="custom"?8.5:8.27;
+let sh=paper==="4r"?6:paper==="custom"?11:11.69;
+let usableW=sw-2*margin,usableH=sh-2*margin;
+let fitCols=Math.max(1,Math.min(cols,Math.floor((usableW+gap)/(pw+gap))));
+let fitRows=Math.max(1,Math.floor((usableH+gap)/(ph+gap)));
+let per=fitCols*fitRows;
+const sheet=$("printSheet");
+sheet.innerHTML="";
+sheet.style.width=sw+"in";
+sheet.style.height=sh+"in";
+sheet.style.padding=margin+"in";
+sheet.style.gridTemplateColumns=`repeat(${fitCols}, ${pw}in)`;
+sheet.style.gridAutoRows=ph+"in";
+sheet.style.columnGap=gap+"in";
+sheet.style.rowGap=gap+"in";
+const src=canvas.toDataURL("image/png");
+const pages=Math.ceil(copies/per);
+let placed=0;
+for(let page=0;page<pages;page++){
+const pageEl=document.createElement("div");
+pageEl.className="sheet";
+pageEl.style.width=sw+"in";
+pageEl.style.height=sh+"in";
+pageEl.style.padding=margin+"in";
+pageEl.style.gridTemplateColumns=`repeat(${fitCols}, ${pw}in)`;
+pageEl.style.gridAutoRows=ph+"in";
+pageEl.style.columnGap=gap+"in";
+pageEl.style.rowGap=gap+"in";
+const onPage=Math.min(per,copies-placed);
+for(let i=0;i<onPage;i++){
+const im=document.createElement("img");
+im.src=src;
+im.style.width=pw+"in";
+im.style.height=ph+"in";
+pageEl.appendChild(im);
+}
+sheet.appendChild(pageEl);
+placed+=onPage;
+}
+$("sheetInfo").textContent=`${copies}টি মোট • ${pages} পৃষ্ঠা • ${fitCols} কলাম • ${sw}″ × ${sh}″`;
+$("printBtn").disabled=false;
+say(`Print preview তৈরি হয়েছে: ${copies}টি ছবি, ${pages} পৃষ্ঠা।`);
+});
+
+$("printBtn").addEventListener("click",()=>window.print());
+
+setButtons(false);
 </script>
 </body>
 </html>

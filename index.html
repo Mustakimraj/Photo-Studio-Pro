@@ -1,437 +1,796 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Photo Studio Pro</title>
+
 <style>
-:root{--bg:#f3f6fb;--panel:#fff;--ink:#172033;--muted:#64748b;--line:#dce4ef;--brand:#2457d6;--brand2:#173fa8;--soft:#edf3ff;--good:#087f5b;--danger:#b42318}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-header{background:#14264d;color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-header h1{font-size:22px;margin:0}
-header p{margin:3px 0 0;color:#cbd5e1;font-size:13px}
-main{max-width:1400px;margin:auto;padding:18px;display:grid;grid-template-columns:minmax(280px,370px) minmax(0,1fr);gap:18px}
-.panel,.workspace{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px #18294b0b}
-.panel{padding:16px;align-self:start}
-.workspace{padding:16px;min-width:0}
+body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
+header{background:#14264d;color:white;padding:18px 22px}
+header h1{margin:0;font-size:23px}
+header p{margin:5px 0 0;color:#cbd5e1;font-size:13px}
+main{max-width:1400px;margin:auto;padding:16px;display:grid;grid-template-columns:350px 1fr;gap:16px}
+.panel,.workspace{background:white;border:1px solid #dce4ef;border-radius:13px;padding:16px;min-width:0}
 h2{font-size:16px;margin:0 0 12px}
-.field{margin:11px 0}
-.field label{display:block;font-weight:650;font-size:13px;margin-bottom:5px}
+.field{margin:12px 0}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:5px}
 input,select,button{font:inherit}
-input[type=file],input[type=number],input[type=text],select{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px;background:#fff;color:var(--ink)}
-input[type=color]{width:48px;height:38px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff}
-input[type=range]{width:100%;accent-color:var(--brand)}
-button{border:0;border-radius:9px;padding:10px 12px;background:var(--brand);color:#fff;font-weight:650;cursor:pointer}
-button:hover{background:var(--brand2)}
-button:disabled{opacity:.55;cursor:not-allowed}
-.secondary{background:#e9eef8;color:#1c2a44}
-.secondary:hover{background:#dbe5f5}
+input[type=file],input[type=number],select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px;background:white}
+input[type=color]{width:48px;height:38px}
+input[type=range]{width:100%;accent-color:#2457d6}
+button{border:0;border-radius:8px;padding:10px 12px;background:#2457d6;color:white;font-weight:bold;cursor:pointer}
+button:hover{background:#173fa8}
+button:disabled{opacity:.5;cursor:not-allowed}
+.secondary{background:#e8eef8;color:#172033}
 .green{background:#087f5b}
-.green:hover{background:#06684b}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .btnrow button{flex:1}
-.note{font-size:12px;color:var(--muted);margin:6px 0}
-.status{font-size:12px;padding:8px 10px;background:#f1f5f9;border-radius:8px;color:#334155;margin-top:9px;min-height:34px}
-.colorrow{display:flex;align-items:center;gap:9px}
-.swatches{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-.swatch{width:26px;height:26px;border:2px solid #cbd5e1;border-radius:50%;cursor:pointer}
-.swatch.active{outline:2px solid var(--brand);outline-offset:2px}
-.previewArea{min-height:380px;background:repeating-conic-gradient(#e8edf4 0% 25%,#f7f9fc 0% 50%) 50%/22px 22px;border:1px dashed #c7d2e2;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:auto;padding:18px}
-#photoCanvas{max-width:100%;max-height:560px;object-fit:contain;box-shadow:0 3px 18px #0002;background:transparent}
-.empty{color:var(--muted);text-align:center;padding:30px}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .smallgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.divider{height:1px;background:var(--line);margin:15px 0}
-.printPreview{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:12px;background:#f8fafc}
-#printSheet{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:10px}
-.sheet{background:#fff;display:grid;justify-content:start;align-content:start;overflow:hidden;box-shadow:0 2px 12px #0001}
-#printSheet img{display:block;object-fit:cover}
-.footer{max-width:1400px;margin:0 auto;padding:0 18px 22px;color:var(--muted);font-size:12px}
-@media(max-width:850px){main{grid-template-columns:1fr;padding:10px}.previewArea{min-height:260px}}
+.note{font-size:12px;color:#64748b}
+.status{padding:9px;background:#f1f5f9;border-radius:8px;font-size:12px;margin-top:10px;min-height:35px}
+.divider{height:1px;background:#e2e8f0;margin:16px 0}
+.previewArea{min-height:350px;background:#edf1f6;border:1px dashed #cbd5e1;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:15px;overflow:auto}
+#photoCanvas{max-width:100%;max-height:550px;object-fit:contain}
+.empty{text-align:center;color:#64748b;padding:25px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.swatches{display:flex;gap:8px;margin-top:8px}
+.swatch{width:26px;height:26px;border-radius:50%;border:2px solid #cbd5e1;cursor:pointer}
+.swatch.active{outline:2px solid #2457d6}
+#printSheet{margin-top:12px;display:flex;flex-direction:column;align-items:center;gap:15px;overflow:auto}
+.sheet{background:white;display:grid;justify-content:start;align-content:start;overflow:hidden;flex:none}
+.sheet img{display:block;object-fit:cover;max-width:none}
+.printPreview{margin-top:16px;padding:12px;background:#f8fafc;border:1px solid #dce4ef;border-radius:10px}
+@media(max-width:850px){main{grid-template-columns:1fr;padding:9px}.previewArea{min-height:250px}}
 @media print{
-body{background:#fff}
-header,.panel,.workspace>.toolbar,.workspace>.h2,.workspace>.previewArea,.workspace>.printControls,.footer{display:none!important}
-main{display:block;padding:0;margin:0}
-.workspace{border:0;box-shadow:none;padding:0}
-.printPreview{border:0;padding:0;margin:0;background:#fff}
-#printSheet{display:block;margin:0}
-.sheet{margin:0;box-shadow:none;break-after:page;page-break-after:always}
-.sheet:last-child{break-after:auto;page-break-after:auto}
+ @page{margin:0}
+ body *{visibility:hidden!important}
+ #printSheet,#printSheet *{visibility:visible!important}
+ #printSheet{position:absolute;left:0;top:0;margin:0;padding:0;display:block;overflow:visible}
+ .sheet{margin:0;box-shadow:none;break-after:page;page-break-after:always}
+ .sheet:last-child{break-after:auto;page-break-after:auto}
 }
 </style>
 </head>
+
 <body>
+
 <header>
-<div>
 <h1>Photo Studio Pro</h1>
-<p>Passport • Stamp • Photo Editing • Print Layout</p>
-</div>
-<div style="font-size:12px;color:#dbeafe">Single-file browser studio</div>
+<p>Passport Photo • Stamp Photo • Photo Editing • Print Studio</p>
 </header>
 
 <main>
+
 <aside class="panel">
+
 <h2>১. ছবি আপলোড</h2>
+
 <div class="field">
-<label for="upload">কম্পিউটার থেকে ছবি নির্বাচন করুন</label>
-<input id="upload" type="file" accept="image/*">
+<label>ছবি নির্বাচন করুন</label>
+<input type="file" id="upload" accept="image/*">
 </div>
+
 <div class="btnrow">
-<button class="secondary" id="resetBtn">রিসেট</button>
-<button class="secondary" id="downloadBtn" disabled>ছবি ডাউনলোড</button>
+<button class="secondary" id="resetBtn" disabled>Reset</button>
+<button class="secondary" id="downloadBtn" disabled>Download</button>
 </div>
-<div class="status" id="status">প্রথমে একটি ছবি আপলোড করুন।</div>
+
+<div class="status" id="status">প্রথমে ছবি আপলোড করুন।</div>
 
 <div class="divider"></div>
+
 <h2>২. Background Remove</h2>
+
 <div class="field">
-<label>ব্যাকগ্রাউন্ডের রং আগে নির্বাচন করুন</label>
-<div class="colorrow">
-<input id="bgColor" type="color" value="#ffffff">
-<span id="bgHex">#FFFFFF</span>
+<label>Background Color</label>
+<input type="color" id="bgColor" value="#ffffff">
 </div>
+
 <div class="swatches">
-<span class="swatch active" data-color="#ffffff" style="background:#fff"></span>
+<span class="swatch active" data-color="#ffffff" style="background:white"></span>
 <span class="swatch" data-color="#d9efff" style="background:#d9efff"></span>
 <span class="swatch" data-color="#1687e8" style="background:#1687e8"></span>
 <span class="swatch" data-color="#00a65a" style="background:#00a65a"></span>
 <span class="swatch" data-color="#ef4444" style="background:#ef4444"></span>
-<span class="swatch" data-color="#000000" style="background:#000"></span>
+<span class="swatch" data-color="#000000" style="background:black"></span>
 </div>
+
+<div class="field">
+<button class="green" id="removeBgBtn" style="width:100%" disabled>
+AI Background Remove
+</button>
 </div>
-<button id="removeBgBtn" class="green" style="width:100%" disabled>এক ক্লিকে AI Background Remove</button>
-<p class="note">প্রথমবার মডেল ডাউনলোড হতে সময় ও ইন্টারনেট লাগতে পারে। প্রসেসিং ব্রাউজারেই হবে।</p>
+
+<p class="note">AI Background Remove ব্যবহারের জন্য ইন্টারনেট প্রয়োজন।</p>
 
 <div class="divider"></div>
-<h2>৩. Face & Photo Editing</h2>
+
+<h2>৩. Photo Editing</h2>
+
 <div class="btnrow">
-<button id="shadowBtn" class="secondary" disabled>Face Shadow কমান</button>
-<button id="clearBtn" class="secondary" disabled>Face Clear / Sharp</button>
+<button class="secondary" id="shadowBtn" disabled>Face Shadow</button>
+<button class="secondary" id="clearBtn" disabled>Face Clear</button>
 </div>
+
 <div class="field">
-<label for="brightness">Brightness: <span id="brightVal">100%</span></label>
-<input id="brightness" type="range" min="70" max="150" value="100" disabled>
+<label>Brightness: <span id="brightVal">100%</span></label>
+<input type="range" id="brightness" min="70" max="150" value="100" disabled>
 </div>
+
 <div class="field">
-<label for="contrast">Contrast: <span id="contrastVal">100%</span></label>
-<input id="contrast" type="range" min="70" max="140" value="100" disabled>
+<label>Contrast: <span id="contrastVal">100%</span></label>
+<input type="range" id="contrast" min="70" max="140" value="100" disabled>
 </div>
+
 <div class="field">
-<label for="sharpness">Sharpness: <span id="sharpVal">0</span></label>
-<input id="sharpness" type="range" min="0" max="4" value="0" disabled>
+<label>Sharpness: <span id="sharpVal">0</span></label>
+<input type="range" id="sharpness" min="0" max="4" value="0" disabled>
 </div>
-<p class="note">Brightness, shadow balancing ও sharpening সাধারণ ছবির প্রসেসিং। এগুলো AI face reconstruction নয়।</p>
 
 <div class="divider"></div>
-<h2>৪. Print Size & Layout</h2>
+
+<h2>৪. Photo Size & Print Layout</h2>
+
 <div class="field">
-<label for="sizePreset">ছবির সাইজ</label>
+<label>Photo Size</label>
 <select id="sizePreset">
-<option value="passport">Passport — 1.5″ × 1.9″</option>
-<option value="stamp">Stamp — 1″ × 1.2″</option>
-<option value="4r">4R — 4″ × 6″</option>
-<option value="5r">5R — 5″ × 7″</option>
-<option value="6r">6R — 6″ × 8″</option>
-<option value="8r">8R — 8″ × 10″</option>
-<option value="a4">A4 — 8.27″ × 11.69″ (sheet)</option>
+<option value="passport">Passport (1.5 × 1.9 inch)</option>
+<option value="stamp">Stamp (1 × 1.2 inch)</option>
+<option value="4r">4R (4 × 6 inch)</option>
+<option value="5r">5R (5 × 7 inch)</option>
+<option value="6r">6R (6 × 8 inch)</option>
+<option value="8r">8R (8 × 10 inch)</option>
 <option value="custom">Custom</option>
 </select>
 </div>
+
 <div class="smallgrid">
-<div class="field"><label for="photoW">Width (inch)</label><input id="photoW" type="number" min=".2" step=".01" value="1.5"></div>
-<div class="field"><label for="photoH">Height (inch)</label><input id="photoH" type="number" min=".2" step=".01" value="1.9"></div>
-<div class="field"><label for="copies">কপি সংখ্যা</label><input id="copies" type="number" min="1" max="200" value="8"></div>
-<div class="field"><label for="columns">প্রতি লাইনে</label><input id="columns" type="number" min="1" max="12" value="4"></div>
-<div class="field"><label for="margin">পেজ মার্জিন (inch)</label><input id="margin" type="number" min="0" max="1" step=".05" value=".2"></div>
-<div class="field"><label for="gap">ছবির দূরত্ব (inch)</label><input id="gap" type="number" min="0" max=".5" step=".01" value=".08"></div>
-</div>
 <div class="field">
-<label for="paper">কাগজ</label>
+<label>Width (inch)</label>
+<input type="number" id="photoW" min=".2" step=".01" value="1.5">
+</div>
+
+<div class="field">
+<label>Height (inch)</label>
+<input type="number" id="photoH" min=".2" step=".01" value="1.9">
+</div>
+
+<div class="field">
+<label>কত কপি ছবি</label>
+<input type="number" id="copies" min="1" max="200" value="8">
+</div>
+
+<div class="field">
+<label>প্রতি লাইনে ছবি</label>
+<input type="number" id="columns" min="1" max="12" value="4">
+</div>
+
+<div class="field">
+<label>Page Margin (inch)</label>
+<input type="number" id="margin" min="0" max="1" step=".05" value=".2">
+</div>
+
+<div class="field">
+<label>Photo Gap (inch)</label>
+<input type="number" id="gap" min="0" max=".5" step=".01" value=".08">
+</div>
+</div>
+
+<div class="field">
+<label>Paper Size</label>
 <select id="paper">
-<option value="a4">A4 (8.27 × 11.69″)</option>
-<option value="4r">4R (4 × 6″)</option>
-<option value="custom">Custom Sheet (8.5 × 11″)</option>
+<option value="a4">A4</option>
+<option value="4r">4R</option>
+<option value="letter">Letter</option>
 </select>
 </div>
+
 <div class="btnrow">
-<button id="previewBtn" disabled>Print Preview তৈরি</button>
-<button id="printBtn" class="green" disabled>প্রিন্ট করুন</button>
+<button id="previewBtn" disabled>Print Preview</button>
+<button id="printBtn" class="green" disabled>Print Now</button>
 </div>
+
 </aside>
 
 <section class="workspace">
+
 <div class="toolbar">
 <div>
-<h2 style="margin:0">Photo Editor Preview</h2>
-<div class="note">মূল ছবি ও এডিট করা ফলাফল এখানে দেখাবে</div>
+<h2>Photo Editor Preview</h2>
+<p class="note">আপনার এডিট করা ছবি এখানে দেখা যাবে।</p>
 </div>
-<span class="note" id="dimensions">No image</span>
+<span class="note" id="dimensions">No Image</span>
 </div>
+
 <div class="previewArea" id="previewArea">
 <div class="empty">ছবি আপলোড করলে এখানে দেখা যাবে</div>
 <canvas id="photoCanvas" hidden></canvas>
 </div>
+
 <div class="printPreview">
 <div class="toolbar">
-<h2 style="margin:0">Print Sheet Preview</h2>
+<h2>Print Sheet Preview</h2>
 <span class="note" id="sheetInfo">এখনো তৈরি হয়নি</span>
 </div>
-<div id="printSheet"><div class="empty">Print Preview তৈরি করুন</div></div>
+
+<div id="printSheet">
+<div class="empty">Print Preview তৈরি করুন</div>
 </div>
-<div class="printControls note">প্রিন্ট ডায়ালগে Paper size, Orientation এবং Scale যাচাই করুন। Scale: 100% / Actual size নির্বাচন করুন; Fit to page বন্ধ রাখুন।</div>
+</div>
+
+<p class="note">প্রিন্ট করার সময় Scale 100% / Actual Size রাখুন।</p>
+
 </section>
 </main>
 
-<div class="footer">নোট: সঠিক রঙ ও মাপের জন্য প্রিন্টারের Borderless / paper settings অনুযায়ী ফল ভিন্ন হতে পারে। পাসপোর্ট সাইজের ডিফল্ট মাপ 1.5″ × 1.9″।</div>
+<script>
+"use strict";
 
-<script type="module">
-import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.6/+esm";
+const $ = id => document.getElementById(id);
 
-const $=id=>document.getElementById(id);
-const canvas=$("photoCanvas"),ctx=canvas.getContext("2d",{willReadFrequently:true});
-let original=null,baseImage=null,processing=false;
+const canvas = $("photoCanvas");
+const ctx = canvas.getContext("2d", {willReadFrequently:true});
 
-const presets={
-passport:[1.5,1.9],
-stamp:[1,1.2],
-"4r":[4,6],
-"5r":[5,7],
-"6r":[6,8],
-"8r":[8,10],
-a4:[8.27,11.69]
+let originalImage = null;
+let baseImageData = null;
+let processing = false;
+let sourceFileName = "photo";
+
+const presets = {
+ passport:[1.5,1.9],
+ stamp:[1,1.2],
+ "4r":[4,6],
+ "5r":[5,7],
+ "6r":[6,8],
+ "8r":[8,10]
 };
 
-function say(t){$("status").textContent=t}
-
-function setButtons(on){
-["removeBgBtn","shadowBtn","clearBtn","brightness","contrast","sharpness","downloadBtn","previewBtn"].forEach(id=>$(id).disabled=!on);
-$("printBtn").disabled=!on;
+function say(message){
+ $("status").textContent = message;
 }
 
-function drawImage(img){
-canvas.width=img.naturalWidth||img.width;
-canvas.height=img.naturalHeight||img.height;
-ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.drawImage(img,0,0);
-$("dimensions").textContent=canvas.width+" × "+canvas.height+" px";
-canvas.hidden=false;
-$("previewArea").querySelector(".empty")?.remove();
-baseImage=ctx.getImageData(0,0,canvas.width,canvas.height);
-setButtons(true);
-$("brightness").value=100;
-$("contrast").value=100;
-$("sharpness").value=0;
-updateLabels();
+function setControls(enabled){
+ [
+ "resetBtn","downloadBtn","removeBgBtn",
+ "shadowBtn","clearBtn","brightness",
+ "contrast","sharpness","previewBtn"
+ ].forEach(id => $(id).disabled = !enabled);
+
+ $("printBtn").disabled = true;
 }
 
 function updateLabels(){
-$("brightVal").textContent=$("brightness").value+"%";
-$("contrastVal").textContent=$("contrast").value+"%";
-$("sharpVal").textContent=$("sharpness").value;
+ $("brightVal").textContent = $("brightness").value+"%";
+ $("contrastVal").textContent = $("contrast").value+"%";
+ $("sharpVal").textContent = $("sharpness").value;
 }
 
-function imageFromBlob(blob){
-return new Promise((resolve,reject)=>{
-const u=URL.createObjectURL(blob),im=new Image();
-im.onload=()=>{URL.revokeObjectURL(u);resolve(im)};
-im.onerror=reject;
-im.src=u;
+function showImage(img){
+
+ canvas.width = img.naturalWidth || img.width;
+ canvas.height = img.naturalHeight || img.height;
+
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.drawImage(img,0,0);
+
+ canvas.hidden = false;
+
+ const empty = $("previewArea").querySelector(".empty");
+ if(empty) empty.remove();
+
+ baseImageData = ctx.getImageData(
+  0,0,canvas.width,canvas.height
+ );
+
+ $("dimensions").textContent =
+ canvas.width+" × "+canvas.height+" px";
+
+ $("brightness").value = 100;
+ $("contrast").value = 100;
+ $("sharpness").value = 0;
+
+ updateLabels();
+ setControls(true);
+
+ $("printSheet").innerHTML =
+ '<div class="empty">Print Preview তৈরি করুন</div>';
+
+ $("sheetInfo").textContent = "এখনো তৈরি হয়নি";
+}
+
+function blobToImage(blob){
+
+ return new Promise((resolve,reject)=>{
+
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+
+  img.onload = ()=>{
+   URL.revokeObjectURL(url);
+   resolve(img);
+  };
+
+  img.onerror = ()=>{
+   URL.revokeObjectURL(url);
+   reject(new Error("ছবি খোলা যায়নি"));
+  };
+
+  img.src = url;
+ });
+}
+
+// PHOTO UPLOAD
+
+$("upload").addEventListener("change",async e=>{
+
+ const file = e.target.files[0];
+
+ if(!file) return;
+
+ if(!file.type.startsWith("image/")){
+  say("সঠিক ছবি নির্বাচন করুন।");
+  return;
+ }
+
+ sourceFileName = file.name.replace(/\.[^.]+$/,"");
+
+ try{
+
+  const img = await blobToImage(file);
+
+  originalImage = img;
+  showImage(img);
+
+  say("ছবি সফলভাবে আপলোড হয়েছে।");
+
+ }catch(error){
+
+  console.error(error);
+  say("ছবি আপলোড করা যায়নি।");
+ }
+
 });
-}
 
-function applyAdjustments(){
-if(!baseImage)return;
-const w=baseImage.width,h=baseImage.height;
-ctx.putImageData(baseImage,0,0);
-let d=ctx.getImageData(0,0,w,h),a=d.data;
-let b=Number($("brightness").value)/100;
-let c=Number($("contrast").value)/100;
-let sh=Number($("sharpness").value);
-for(let i=0;i<a.length;i+=4){
-for(let k=0;k<3;k++){
-let v=(a[i+k]-128)*c+128;
-a[i+k]=Math.max(0,Math.min(255,v*b));
-}
-}
-ctx.putImageData(d,0,0);
-if(sh>0){
-const src=ctx.getImageData(0,0,w,h),out=ctx.createImageData(w,h);
-const s=src.data,o=out.data,amt=sh*.18;
-for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
-let p=(y*w+x)*4;
-for(let k=0;k<3;k++){
-let center=s[p+k];
-let avg=(s[p-4+k]+s[p+4+k]+s[p-w*4+k]+s[p+w*4+k])/4;
-o[p+k]=Math.max(0,Math.min(255,center+(center-avg)*amt));
-}
-o[p+3]=s[p+3];
-}
-ctx.putImageData(out,0,0);
-}
-updateLabels();
-}
-
-$("upload").addEventListener("change",e=>{
-const f=e.target.files?.[0];
-if(!f)return;
-if(!f.type.startsWith("image/")){say("সঠিক ছবি নির্বাচন করুন।");return}
-const u=URL.createObjectURL(f),im=new Image();
-im.onload=()=>{
-original=im;
-drawImage(im);
-URL.revokeObjectURL(u);
-say("ছবি লোড হয়েছে। এখন এডিট করতে পারবেন।");
-};
-im.onerror=()=>say("ছবি খোলা যায়নি। অন্য ছবি দিন।");
-im.src=u;
-});
+// BACKGROUND COLOR
 
 $("bgColor").addEventListener("input",()=>{
-$("bgHex").textContent=$("bgColor").value.toUpperCase();
-document.querySelectorAll(".swatch").forEach(s=>s.classList.toggle("active",s.dataset.color===$("bgColor").value));
+
+ document.querySelectorAll(".swatch").forEach(s=>{
+  s.classList.toggle(
+   "active",
+   s.dataset.color === $("bgColor").value
+  );
+ });
+
 });
 
-document.querySelectorAll(".swatch").forEach(s=>s.addEventListener("click",()=>{
-$("bgColor").value=s.dataset.color;
-$("bgColor").dispatchEvent(new Event("input"));
-}));
+document.querySelectorAll(".swatch").forEach(s=>{
+
+ s.addEventListener("click",()=>{
+
+  $("bgColor").value = s.dataset.color;
+  $("bgColor").dispatchEvent(new Event("input"));
+
+ });
+
+});
+
+// AI BACKGROUND REMOVE
 
 $("removeBgBtn").addEventListener("click",async()=>{
-if(!original||processing)return;
-processing=true;
-$("removeBgBtn").disabled=true;
-say("AI মডেল লোড হচ্ছে; প্রথমবার সময় লাগতে পারে…");
-try{
-const blob=await new Promise(r=>canvas.toBlob(r,"image/png"));
-const result=await removeBackground(blob,{
-model:"medium",
-output:{format:"image/png",quality:1}
+
+ if(!canvas.width || processing) return;
+
+ processing = true;
+ $("removeBgBtn").disabled = true;
+
+ say("AI মডেল লোড হচ্ছে। প্রথমবার কিছুটা সময় লাগতে পারে...");
+
+ try{
+
+  const module = await import(
+   "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.6/+esm"
+  );
+
+  const blob = await new Promise((resolve,reject)=>{
+
+   canvas.toBlob(b=>{
+    if(b) resolve(b);
+    else reject(new Error("ছবি তৈরি হয়নি"));
+   },"image/png");
+
+  });
+
+  const transparent = await module.removeBackground(blob,{
+   model:"medium",
+   output:{
+    format:"image/png",
+    quality:1
+   }
+  });
+
+  const cutout = await blobToImage(transparent);
+
+  const merged = document.createElement("canvas");
+  merged.width = cutout.width;
+  merged.height = cutout.height;
+
+  const mctx = merged.getContext("2d");
+
+  mctx.fillStyle = $("bgColor").value;
+  mctx.fillRect(0,0,merged.width,merged.height);
+
+  mctx.drawImage(cutout,0,0);
+
+  const finalBlob = await new Promise(resolve=>{
+   merged.toBlob(resolve,"image/png");
+  });
+
+  const finalImage = await blobToImage(finalBlob);
+
+  showImage(finalImage);
+
+  say("Background Remove সফল হয়েছে!");
+
+ }catch(error){
+
+  console.error(error);
+
+  say("Background Remove হয়নি। ইন্টারনেট, CDN অথবা মডেল ডাউনলোড পরীক্ষা করুন।");
+
+ }finally{
+
+  processing = false;
+  $("removeBgBtn").disabled = !canvas.width;
+
+ }
+
 });
-const im=await imageFromBlob(result);
-const tmp=document.createElement("canvas");
-tmp.width=im.width;
-tmp.height=im.height;
-const t=tmp.getContext("2d");
-t.fillStyle=$("bgColor").value;
-t.fillRect(0,0,tmp.width,tmp.height);
-t.drawImage(im,0,0);
-const merged=await imageFromBlob(await new Promise(r=>tmp.toBlob(r,"image/png")));
-drawImage(merged);
-say("Background remove হয়েছে এবং নির্বাচিত রং বসানো হয়েছে।");
-}catch(err){
-console.error(err);
-say("AI Background Remove ব্যর্থ হয়েছে। ইন্টারনেট/ব্রাউজার অনুমতি পরীক্ষা করে আবার চেষ্টা করুন।");
-}finally{
-processing=false;
-$("removeBgBtn").disabled=false;
+
+// PHOTO EDITING
+
+function applyAdjustments(){
+
+ if(!baseImageData) return;
+
+ const w = baseImageData.width;
+ const h = baseImageData.height;
+
+ const out = new ImageData(
+  new Uint8ClampedArray(baseImageData.data),
+  w,h
+ );
+
+ const d = out.data;
+
+ const b = Number($("brightness").value)/100;
+ const c = Number($("contrast").value)/100;
+ const sharp = Number($("sharpness").value);
+
+ for(let i=0;i<d.length;i+=4){
+
+  for(let k=0;k<3;k++){
+
+   let v = (d[i+k]-128)*c+128;
+
+   d[i+k] = Math.max(
+    0,
+    Math.min(255,v*b)
+   );
+
+  }
+
+ }
+
+ ctx.putImageData(out,0,0);
+
+ if(sharp>0 && w>2 && h>2){
+
+  const src = ctx.getImageData(0,0,w,h);
+  const s = src.data;
+
+  const result = ctx.createImageData(w,h);
+  const r = result.data;
+
+  r.set(s);
+
+  const amount = sharp*.22;
+
+  for(let y=1;y<h-1;y++){
+
+   for(let x=1;x<w-1;x++){
+
+    const p = (y*w+x)*4;
+
+    for(let k=0;k<3;k++){
+
+     const avg = (
+      s[p-4+k]+
+      s[p+4+k]+
+      s[p-w*4+k]+
+      s[p+w*4+k]
+     )/4;
+
+     r[p+k] = Math.max(
+      0,
+      Math.min(
+       255,
+       s[p+k]+(s[p+k]-avg)*amount
+      )
+     );
+
+    }
+
+   }
+
+  }
+
+  ctx.putImageData(result,0,0);
+
+ }
+
+ updateLabels();
 }
+
+["brightness","contrast","sharpness"].forEach(id=>{
+
+ $(id).addEventListener("input",applyAdjustments);
+
 });
 
 $("shadowBtn").addEventListener("click",()=>{
-if(!baseImage)return;
-$("brightness").value=Math.max(105,Number($("brightness").value));
-$("contrast").value=95;
-applyAdjustments();
-say("ছবির সামগ্রিক ছায়া কিছুটা কমানোর adjustment করা হয়েছে; এটি AI face-only shadow removal নয়।");
+
+ if(!baseImageData) return;
+
+ $("brightness").value = Math.max(
+  108,
+  Number($("brightness").value)
+ );
+
+ $("contrast").value = 96;
+
+ applyAdjustments();
+
+ say("Brightness সমন্বয় করা হয়েছে।");
+
 });
 
 $("clearBtn").addEventListener("click",()=>{
-if(!baseImage)return;
-$("sharpness").value=3;
-$("contrast").value=108;
-applyAdjustments();
-say("ছবির sharpness ও contrast বাড়ানো হয়েছে।");
+
+ if(!baseImageData) return;
+
+ $("sharpness").value = 3;
+ $("contrast").value = 108;
+
+ applyAdjustments();
+
+ say("Sharpness ও Contrast বাড়ানো হয়েছে।");
+
 });
 
-["brightness","contrast","sharpness"].forEach(id=>$(id).addEventListener("input",applyAdjustments));
+// SIZE SELECT
 
 $("sizePreset").addEventListener("change",()=>{
-const p=presets[$("sizePreset").value];
-if(p){
-$("photoW").value=p[0];
-$("photoH").value=p[1];
-}
+
+ const p = presets[$("sizePreset").value];
+
+ if(p){
+
+  $("photoW").value = p[0];
+  $("photoH").value = p[1];
+
+ }
+
 });
+
+// RESET
 
 $("resetBtn").addEventListener("click",()=>{
-if(!original)return;
-drawImage(original);
-say("মূল ছবিতে ফিরে গেছে।");
+
+ if(!originalImage) return;
+
+ showImage(originalImage);
+
+ say("মূল ছবিতে ফিরে গেছে।");
+
 });
+
+// DOWNLOAD
 
 $("downloadBtn").addEventListener("click",()=>{
-canvas.toBlob(b=>{
-const a=document.createElement("a"),u=URL.createObjectURL(b);
-a.href=u;
-a.download="photo-studio-edited.png";
-a.click();
-URL.revokeObjectURL(u);
-},"image/png");
+
+ if(!canvas.width) return;
+
+ canvas.toBlob(blob=>{
+
+  if(!blob){
+   say("ডাউনলোড তৈরি হয়নি।");
+   return;
+  }
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = (sourceFileName || "photo")+"-edited.png";
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+ },"image/png");
+
 });
 
-function num(id,min,max){
-let v=Number($(id).value);
-return Number.isFinite(v)?Math.max(min,Math.min(max,v)):min;
+// PRINT LAYOUT
+
+function readNum(id,min,max){
+
+ const value = Number($(id).value);
+
+ return Number.isFinite(value)
+  ? Math.max(min,Math.min(max,value))
+  : min;
+
 }
 
-$("previewBtn").addEventListener("click",()=>{
-if(!canvas.width)return;
-const pw=num("photoW",.2,12);
-const ph=num("photoH",.2,16);
-const copies=Math.round(num("copies",1,200));
-const cols=Math.round(num("columns",1,12));
-const margin=num("margin",0,1);
-const gap=num("gap",0,.5);
-const paper=$("paper").value;
-let sw=paper==="4r"?4:paper==="custom"?8.5:8.27;
-let sh=paper==="4r"?6:paper==="custom"?11:11.69;
-let usableW=sw-2*margin,usableH=sh-2*margin;
-let fitCols=Math.max(1,Math.min(cols,Math.floor((usableW+gap)/(pw+gap))));
-let fitRows=Math.max(1,Math.floor((usableH+gap)/(ph+gap)));
-let per=fitCols*fitRows;
-const sheet=$("printSheet");
-sheet.innerHTML="";
-sheet.style.width=sw+"in";
-sheet.style.height=sh+"in";
-sheet.style.padding=margin+"in";
-sheet.style.gridTemplateColumns=`repeat(${fitCols}, ${pw}in)`;
-sheet.style.gridAutoRows=ph+"in";
-sheet.style.columnGap=gap+"in";
-sheet.style.rowGap=gap+"in";
-const src=canvas.toDataURL("image/png");
-const pages=Math.ceil(copies/per);
-let placed=0;
-for(let page=0;page<pages;page++){
-const pageEl=document.createElement("div");
-pageEl.className="sheet";
-pageEl.style.width=sw+"in";
-pageEl.style.height=sh+"in";
-pageEl.style.padding=margin+"in";
-pageEl.style.gridTemplateColumns=`repeat(${fitCols}, ${pw}in)`;
-pageEl.style.gridAutoRows=ph+"in";
-pageEl.style.columnGap=gap+"in";
-pageEl.style.rowGap=gap+"in";
-const onPage=Math.min(per,copies-placed);
-for(let i=0;i<onPage;i++){
-const im=document.createElement("img");
-im.src=src;
-im.style.width=pw+"in";
-im.style.height=ph+"in";
-pageEl.appendChild(im);
+function buildPrintPreview(){
+
+ if(!canvas.width){
+  say("আগে ছবি আপলোড করুন।");
+  return;
+ }
+
+ const photoW = readNum("photoW",.2,12);
+ const photoH = readNum("photoH",.2,16);
+
+ const copies = Math.round(readNum("copies",1,200));
+ const requestedCols = Math.round(readNum("columns",1,12));
+
+ const margin = readNum("margin",0,1);
+ const gap = readNum("gap",0,.5);
+
+ const paper = $("paper").value;
+
+ let paperSize;
+
+ if(paper==="4r"){
+  paperSize=[4,6];
+ }else if(paper==="letter"){
+  paperSize=[8.5,11];
+ }else{
+  paperSize=[8.27,11.69];
+ }
+
+ const sheetW = paperSize[0];
+ const sheetH = paperSize[1];
+
+ const usableW = sheetW-2*margin;
+ const usableH = sheetH-2*margin;
+
+ const fitCols = Math.floor(
+  (usableW+gap)/(photoW+gap)
+ );
+
+ const fitRows = Math.floor(
+  (usableH+gap)/(photoH+gap)
+ );
+
+ if(fitCols<1 || fitRows<1){
+
+  say("এই কাগজে ছবির সাইজ ফিট হচ্ছে না।");
+  return;
+
+ }
+
+ const cols = Math.min(requestedCols,fitCols);
+ const rows = fitRows;
+
+ const perPage = cols*rows;
+ const pages = Math.ceil(copies/perPage);
+
+ const holder = $("printSheet");
+
+ holder.innerHTML = "";
+
+ const src = canvas.toDataURL("image/png");
+
+ let done = 0;
+
+ for(let page=0;page<pages;page++){
+
+  const pageEl = document.createElement("div");
+
+  pageEl.className = "sheet";
+
+  pageEl.style.width = sheetW+"in";
+  pageEl.style.height = sheetH+"in";
+  pageEl.style.padding = margin+"in";
+
+  pageEl.style.gridTemplateColumns =
+   `repeat(${cols}, ${photoW}in)`;
+
+  pageEl.style.gridAutoRows = photoH+"in";
+
+  pageEl.style.columnGap = gap+"in";
+  pageEl.style.rowGap = gap+"in";
+
+  const count = Math.min(
+   perPage,
+   copies-done
+  );
+
+  for(let i=0;i<count;i++){
+
+   const img = document.createElement("img");
+
+   img.src = src;
+   img.alt = "Print Photo";
+
+   img.style.width = photoW+"in";
+   img.style.height = photoH+"in";
+
+   pageEl.appendChild(img);
+
+  }
+
+  holder.appendChild(pageEl);
+
+  done += count;
+
+ }
+
+ const paperName =
+  paper==="4r" ? "4R" :
+  paper==="letter" ? "Letter" : "A4";
+
+ $("sheetInfo").textContent =
+  copies+" কপি • "+
+  pages+" পৃষ্ঠা • "+
+  paperName;
+
+ $("printBtn").disabled = false;
+
+ say(
+  "Print Layout তৈরি হয়েছে: "+
+  copies+" কপি, "+
+  pages+" পৃষ্ঠা।"
+ );
+
 }
-sheet.appendChild(pageEl);
-placed+=onPage;
-}
-$("sheetInfo").textContent=`${copies}টি মোট • ${pages} পৃষ্ঠা • ${fitCols} কলাম • ${sw}″ × ${sh}″`;
-$("printBtn").disabled=false;
-say(`Print preview তৈরি হয়েছে: ${copies}টি ছবি, ${pages} পৃষ্ঠা।`);
+
+$("previewBtn").addEventListener(
+ "click",
+ buildPrintPreview
+);
+
+// PRINT
+
+$("printBtn").addEventListener("click",()=>{
+
+ if(!$("printSheet").querySelector(".sheet")){
+
+  say("আগে Print Preview তৈরি করুন।");
+  return;
+
+ }
+
+ window.print();
+
 });
 
-$("printBtn").addEventListener("click",()=>window.print());
+// INITIALIZE
 
-setButtons(false);
+setControls(false);
+updateLabels();
+
 </script>
+
 </body>
 </html>
